@@ -84,7 +84,7 @@ export const Index = () => {
   }, [isLoading, isLoading1]);
 
   //! =============================  업비트소켓   ==================================
-  const upbitSocketList = useRef([]);
+  const upbitSocketList = useRef<any>([]);
 
   useEffect(() => {
     if (!isLoading && !isLoading1) {
@@ -155,19 +155,23 @@ export const Index = () => {
     return () => binanceSocket.close();
   }, []);
   const [lastData, setLastData] = useState<any>([]);
+
+  // ~===================== 상태변화
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isLoading && !isLoading1 && firstRenderList.length !== 0) {
-        let newUpbitList = upbitSocketList.current
+        let newUpbitList: any = upbitSocketList.current
           .reverse()
           .filter((el: any, idx: any, arr: any) => {
             return arr.findIndex((item: any) => item.name === el.name) === idx;
           });
-        let newBinanceList = binanceSocketList.current.filter((el: any) => {
-          if (binanceCoinList.includes(el.s)) {
-            return el;
+        let newBinanceList: any = binanceSocketList.current.filter(
+          (el: any) => {
+            if (binanceCoinList.includes(el.s)) {
+              return el;
+            }
           }
-        });
+        );
         const LastData = () => {
           let newData = [];
           for (let i = 0; i < newUpbitList.length; i++) {
