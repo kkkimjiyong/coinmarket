@@ -248,7 +248,7 @@ export const Index = () => {
         // console.log("바이낸스소켓", newBinanceList);
         // console.log("들어갈 데이터리스트", firstRenderList);
       }
-    }, 50);
+    }, 300);
 
     return () => {
       clearInterval(interval);
