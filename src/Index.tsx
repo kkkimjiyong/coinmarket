@@ -4,6 +4,7 @@ import { Item } from "./components/Item";
 import binance from "./assets/image/binance.png";
 import upbit from "./assets/image/upbit.png";
 import axios from "axios";
+import { Loading } from "./components/Loading";
 
 export const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -58,7 +59,7 @@ export const Index = () => {
       setUsdt(KRWBTC.trade_price / USDTBTC.trade_price);
       setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 1200);
     } catch (error) {}
   };
 
@@ -81,7 +82,7 @@ export const Index = () => {
       setFirstBinance(binanceList);
       setTimeout(() => {
         setIsLoading1(false);
-      }, 1000);
+      }, 1200);
     } catch (error) {}
   };
 
@@ -228,19 +229,22 @@ export const Index = () => {
 
   return (
     <StyledContainer>
+      {isLoading && isLoading1 && <Loading />}
       <StyledHeaderContainer>
         <StyledExchaneBox>
           BTC-KRW(업비트)
-          <div>{upBtc}</div>
+          <div className="number">{upBtc}</div>
         </StyledExchaneBox>
         <StyledExchaneBox>
-          BTC_KRW(바이낸스)<div>{~~(binanceBtc * usdt)}</div>
+          BTC_KRW(바이낸스)
+          <div className="number">{~~(binanceBtc * usdt)}</div>
         </StyledExchaneBox>
         <StyledExchaneBox>
-          시세차이 per <div>{~~(upBtc - binanceBtc * usdt)}원</div>
+          시세차이 per{" "}
+          <div className="number">{~~(upBtc - binanceBtc * usdt)}원</div>
         </StyledExchaneBox>
         <StyledExchaneBox>
-          USDT환율 <div>{usdt?.toFixed(2)}</div>
+          USDT환율 <div className="number">{usdt?.toFixed(2)}</div>
         </StyledExchaneBox>
       </StyledHeaderContainer>
       <StyledTitle>
@@ -283,16 +287,31 @@ const StyledHeaderContainer = styled.div`
 `;
 
 const StyledExchaneBox = styled.div`
+  color: #aeb1ca;
   width: 30%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  margin-top: 15px;
+  /* justify-content: space-around; */
+  font-weight: 700;
+  .number {
+    color: #c5c7da;
+    margin-top: 15px;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 1px solid #626684;
+    font-weight: 500;
+  }
 `;
 
 const StyledTitle = styled.div`
   margin: 50px auto 0px auto;
+  padding: 0px 20px;
   width: 90%;
   height: 70px;
   background-color: #0e162d;
@@ -306,6 +325,7 @@ const StyledTitleItem = styled.div`
   align-items: center;
   justify-content: start;
   flex: 1;
+  font-weight: 700;
   .upbit {
     margin-right: 5px;
     width: 20%;
