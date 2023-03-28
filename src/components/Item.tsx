@@ -9,13 +9,9 @@ export const Item = ({ el, usdt }: { el: any; usdt: any }) => {
   useEffect(() => {
     if (el.upbit > el.binance * usdt) {
       setPer(((el.upbit - el.binance) / el.binance) * 100);
-      setUpBitColor("#ff0000");
-      setBinanceColor("blue");
       setLarger("upbit");
     } else if (el.upbit < el.binance * usdt) {
       setPer(((el.binance - el.upbit) / el.binance) * 100);
-      setUpBitColor("blue");
-      setBinanceColor("#ff0000");
       setLarger("binance");
     }
   }, [el]);
@@ -25,22 +21,10 @@ export const Item = ({ el, usdt }: { el: any; usdt: any }) => {
       <StyledItemBox larger={larger} className="coinName">
         {el?.name}
       </StyledItemBox>
-      <StyledItemBox
-        className="binance"
-        larger={larger}
-        style={{
-          color: `${binanceColor}`,
-        }}
-      >
+      <StyledItemBox className="binance" larger={larger}>
         {~~(el.binance * usdt)}
       </StyledItemBox>
-      <StyledItemBox
-        larger={larger}
-        className="upbit"
-        style={{
-          color: `${upBitColor}`,
-        }}
-      >
+      <StyledItemBox larger={larger} className="upbit">
         {el?.upbit}
       </StyledItemBox>
       <StyledItemBox larger={larger}>
@@ -69,9 +53,11 @@ const StyledItemBox = styled.div<{ larger: string }>`
   justify-content: start;
   flex: 1;
   &.binance {
+    color: ${({ larger }) => (larger === "binance" ? "red" : "blue")};
     font-weight: ${({ larger }) => larger === "binance" && "700"};
   }
   &.upbit {
+    color: ${({ larger }) => (larger === "upbit" ? "red" : "blue")};
     font-weight: ${({ larger }) => larger === "upbit" && "700"};
   }
   &.coinName {
