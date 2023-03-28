@@ -16,7 +16,7 @@ export const Item = ({ el, usdt }: { el: any; usdt: any }) => {
 
   return (
     <StyledContainer>
-      <StyledItemBox>{el?.name}</StyledItemBox>
+      <StyledItemBox className="coinName">{el?.name}</StyledItemBox>
       <StyledItemBox>{~~(el.binance * usdt)}</StyledItemBox>
       <StyledItemBox> {el?.upbit}</StyledItemBox>
       <StyledItemBox>{el?.upbit - ~~(el.binance * usdt)}</StyledItemBox>
@@ -40,4 +40,9 @@ const StyledItemBox = styled.div`
   align-items: center;
   justify-content: start;
   flex: 1;
+
+  &.coinName {
+    font-weight: 700;
+    font-size: 20px;
+  }
 `;

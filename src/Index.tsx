@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { Item } from "./components/Item";
-import { Header } from "./global/Header";
 import binance from "./assets/image/binance.png";
 import upbit from "./assets/image/upbit.png";
 import axios from "axios";
@@ -18,7 +17,6 @@ export const Index = () => {
     "NEOUSDT",
     "SANDUSDT",
     "ETCUSDT",
-    "NUUSDT",
     "APTUSDT",
     "SXPUSDT",
     "LOOMUSDT",
@@ -31,7 +29,6 @@ export const Index = () => {
     "KRW-NEO",
     "KRW-SAND",
     "KRW-ETC",
-    "KRW-NU",
     "KRW-APT",
     "KRW-SXP",
     "KRW-LOOM",
@@ -47,7 +44,7 @@ export const Index = () => {
   const getUpbitAllList = async () => {
     try {
       const response = await axios.get(
-        "https://api.upbit.com/v1/ticker?markets=USDT-BTC,KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP,KRW-NEO,KRW-SAND,KRW-ETC,KRW-NU,KRW-APT,KRW-SXP,KRW-LOOM"
+        "https://api.upbit.com/v1/ticker?markets=USDT-BTC,KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP,KRW-NEO,KRW-SAND,KRW-ETC,KRW-APT,KRW-SXP,KRW-LOOM"
       );
       setFirstUpbit(response.data);
       console.log(response);
