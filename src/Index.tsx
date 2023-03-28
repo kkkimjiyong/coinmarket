@@ -10,27 +10,62 @@ export const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoading1, setIsLoading1] = useState<boolean>(true);
 
-  const binanceCoinList = ["MASKUSDT", "BTCUSDT", "OMGUSDT", "XRPUSDT"];
-  const upbitCoinList = ["KRW-BTC", "KRW-MASK", "KRW-OMG", "KRW-XRP"];
+  const binanceCoinList = [
+    "MASKUSDT",
+    "BTCUSDT",
+    "OMGUSDT",
+    "XRPUSDT",
+    "NEOUSDT",
+    "SANDUSDT",
+    "ETCUSDT",
+    "NUUSDT",
+    "APTUSDT",
+    "SXPUSDT",
+    "LOOMUSDT",
+  ];
+  const upbitCoinList = [
+    "KRW-BTC",
+    "KRW-MASK",
+    "KRW-OMG",
+    "KRW-XRP",
+    "KRW-NEO",
+    "KRW-SAND",
+    "KRW-ETC",
+    "KRW-NU",
+    "KRW-APT",
+    "KRW-SXP",
+    "KRW-LOOM",
+  ];
 
   const [firstUpbit, setFirstUpbit] = useState<any>();
   const [firstBinance, setFirstBinance] = useState<any>();
   const [firstRenderList, setFirstRenderList] = useState<any>([]);
 
+  //업비트 usdt환율 가져오기
   const [upBtc, setUpBtc] = useState<any>();
   const [usdt, setUsdt] = useState<any>();
-
   const getUpbitAllList = async () => {
     try {
       const response = await axios.get(
-        "https://api.upbit.com/v1/ticker?markets=KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP"
+        "https://api.upbit.com/v1/ticker?markets=USDT-BTC,KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP,KRW-NEO,KRW-SAND,KRW-ETC,KRW-NU,KRW-APT,KRW-SXP,KRW-LOOM"
       );
       setFirstUpbit(response.data);
+      console.log(response);
+      let KRWBTC = response.data.filter((el: any) => {
+        return el.market === "KRW-BTC";
+      })[0];
+      let USDTBTC = response.data.filter((el: any) => {
+        return el.market === "USDT-BTC";
+      })[0];
+      setUpBtc(KRWBTC.trade_price);
+      setUsdt(KRWBTC.trade_price / USDTBTC.trade_price);
       setTimeout(() => {
         setIsLoading(false);
       }, 1000);
     } catch (error) {}
   };
+
+  const [binanceBtc, setBinanceBtc] = useState<any>();
 
   const getBinanceAllList = async () => {
     try {
@@ -42,6 +77,10 @@ export const Index = () => {
           return a;
         }
       });
+      let USDTBTC = binanceList.filter((el: any) => {
+        return el.symbol === "BTCUSDT";
+      })[0];
+      setBinanceBtc(USDTBTC.lastPrice);
       setFirstBinance(binanceList);
       setTimeout(() => {
         setIsLoading1(false);
@@ -91,50 +130,22 @@ export const Index = () => {
       const upbitSocket = new WebSocket("wss://api.upbit.com/websocket/v1");
       upbitSocket.onopen = (e: any) => {
         upbitSocket.send(
-          '[{"ticket":"test"},{"type":"ticker","codes":["KRW-BTC","KRW-MASK","KRW-OMG","KRW-XRP","KRW-STX"]},{"format":"SIMPLE"}]'
+          '[{"ticket":"test"},{"type":"ticker","codes":[USDT-BTC,KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP,KRW-NEO,KRW-SAND,KRW-ETC,KRW-NU,KRW-APT,KRW-SXP,KRW-LOOM]},{"format":"SIMPLE"}]'
         );
       };
       upbitSocket.onmessage = (e: any) => {
         e.data.text().then((data: any) => {
           const response: any = JSON.parse(data);
-          // if (upbitSocketList.current.length !== 0) {
-          //   if (upbitSocketList.current.at(-1).name !== response.cd) {
-          //     upbitSocketList.current.push({
-          //       name: response.cd,
-          //       upbit: response.tp,
-          //     });
-          //   }
-          // } else {
           upbitSocketList.current.push({
             name: response.cd,
             upbit: response.tp,
           });
-          // }
         });
       };
       return () => upbitSocket.close();
     }
   }, [isLoading, isLoading1]);
-  //usdt만 요청하는 소켓
 
-  useEffect(() => {
-    const upbitUsdtSocket = new WebSocket("wss://api.upbit.com/websocket/v1");
-    upbitUsdtSocket.onopen = (e: any) => {
-      upbitUsdtSocket.send(
-        '[{"ticket":"test"},{"type":"trade","codes":["USDT-BTC"]},{"format":"SIMPLE"}]'
-      );
-    };
-
-    upbitUsdtSocket.onmessage = (e: any) => {
-      e.data.text().then((data: any) => {
-        const response = JSON.parse(data);
-        // console.log(response.tp);
-        setUsdt(response.tp);
-      });
-    };
-
-    return () => upbitUsdtSocket.close();
-  }, []);
   //! -------------------------  바이낸스  --------------------
   const binanceSocketList = useRef([]);
   useEffect(() => {
@@ -154,109 +165,87 @@ export const Index = () => {
     };
     return () => binanceSocket.close();
   }, []);
-  const [lastData, setLastData] = useState<any>([]);
 
   // ~===================== 상태변화
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (!isLoading && !isLoading1 && firstRenderList.length !== 0) {
+        // 새로운 코인리스트
         let newUpbitList: any = upbitSocketList.current
           .reverse()
           .filter((el: any, idx: any, arr: any) => {
             return arr.findIndex((item: any) => item.name === el.name) === idx;
           });
-        let newBinanceList: any = binanceSocketList.current.filter(
+
+        let newBinanceList: any = binanceSocketList.current?.filter(
           (el: any) => {
             if (binanceCoinList.includes(el.s)) {
               return el;
             }
           }
         );
-        const LastData = () => {
-          let newData = [];
+        let firstRender = [...firstRenderList];
+        firstRender.map((el: any) => {
           for (let i = 0; i < newUpbitList.length; i++) {
-            for (let j = 0; j < newBinanceList.length; j++) {
-              let upbitName = newUpbitList[i].name.split("").slice(4).join("");
-              let binanceName = newBinanceList[j].s
-                .split("")
-                .reverse()
-                .slice(4)
-                .reverse()
-                .join("");
-              if (upbitName === binanceName) {
-                newData.push({
-                  name: upbitName,
-                  upbit: newUpbitList[i].upbit,
-                  binance: newBinanceList[j].c,
-                });
-              }
+            let newUpbitName = newUpbitList[i].name.split("").slice(4).join("");
+            if (el.name === newUpbitName) {
+              el.upbit = newUpbitList[i].upbit;
             }
           }
-          return newData;
-        };
-        let last = LastData();
-        let final: any;
-        if (last.length !== 0) {
-          let firstRender = [...firstRenderList];
-          final = firstRender.map((el: any) => {
-            for (let i = 0; i < last.length; i++) {
-              let upbitName = el.name;
-              let binanceName = last[i].name;
-              if (upbitName === binanceName) {
-                return last[i];
-              } else {
-                return el;
-              }
+          for (let j = 0; j < newBinanceList.length; j++) {
+            let newBinanceName = newBinanceList[j].s
+              .split("")
+              .reverse()
+              .slice(4)
+              .reverse()
+              .join("");
+            if (el.name === newBinanceName) {
+              el.binance = newBinanceList[j].c;
             }
-          });
-
-          setFirstRenderList(final);
+          }
+        });
+        console.log(firstRender);
+        setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
+        let filteredList = [...firstRender];
+        console.log(filteredList);
+        let lastBTC = filteredList.filter((el: any) => {
+          return el.name === "BTC";
+        });
+        let lastUSDTBTC = newUpbitList.filter((el: any) => {
+          return el.name === "USDT-BTC";
+        });
+        if (lastUSDTBTC.length > 0) {
+          setUsdt(lastBTC[0].upbit / lastUSDTBTC[0].upbit);
         }
 
-        // setFirstRenderList((prev: any) => {
-        //   return prev.map((el: any) => {
-        //     for (let i = 0; i < last.length; i++) {
-        //       let upbitName = el.name;
-        //       let binanceName = last[i].name;
-        //       if (upbitName === binanceName) {
-        //         return last[i];
-        //       } else {
-        //         return el;
-        //       }
-        //     }
-        //   });
-        // });
-        // let Final = () => {
-        //   let newData = [];
-        //   for (let i = 0; i < firstRenderList.length; i++) {
-        //     console.log("실행");
-        //     for (let j = 0; j < last.length; j++) {
-        //       console.log(last[j]);
-        //       let upbitName = firstRenderList[i].name;
-        //       let binanceName = last[j].name;
-        //       if (upbitName === binanceName) {
-        //         newData.push(last[j]);
-        //       } else {
-        //         newData.push(firstRenderList[i]);
-        //       }
-        //     }
-        //   }
-        //   return newData;
-        // };
-        // let final = Final();
-        // console.log("업비트소켓", newUpbitList);
-        // console.log("바이낸스소켓", newBinanceList);
-        // console.log("들어갈 데이터리스트", firstRenderList);
+        setUpBtc(lastBTC[0].upbit);
+        setBinanceBtc(lastBTC[0].binance);
       }
-    }, 300);
+    }, 500);
 
     return () => {
       clearInterval(interval);
     };
   }, [isLoading, isLoading1, firstRenderList]);
+
   return (
     <StyledContainer>
-      <Header />
+      <StyledHeaderContainer>
+        <StyledExchaneBox>
+          BTC-KRW(업비트)
+          <div>{upBtc}</div>
+        </StyledExchaneBox>
+        <StyledExchaneBox>
+          BTC_KRW(바이낸스)<div>{~~(binanceBtc * usdt)}</div>
+        </StyledExchaneBox>
+        <StyledExchaneBox>
+          시세차이 per <div>{~~(upBtc - binanceBtc * usdt)}원</div>
+        </StyledExchaneBox>
+        <StyledExchaneBox>
+          USDT환율 <div>{usdt?.toFixed(2)}</div>
+        </StyledExchaneBox>
+      </StyledHeaderContainer>
       <StyledTitle>
         <StyledTitleItem>코인이름</StyledTitleItem>
         <StyledTitleItem>
@@ -271,7 +260,7 @@ export const Index = () => {
         <StyledTitleItem>per</StyledTitleItem>
       </StyledTitle>
       {firstRenderList.map((el: any) => {
-        return <Item el={el} key={el.name} />;
+        return <Item el={el} key={el.name} usdt={usdt} />;
       })}
     </StyledContainer>
   );
@@ -282,7 +271,27 @@ const StyledContainer = styled.div`
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  overflow-y: scroll;
   background-color: #303550;
+`;
+
+const StyledHeaderContainer = styled.div`
+  margin: 20px auto;
+  min-width: 500px;
+  width: 90%;
+  height: 100px;
+  background-color: #0e162d;
+  border-radius: 10px;
+  display: flex;
+`;
+
+const StyledExchaneBox = styled.div`
+  width: 30%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 `;
 
 const StyledTitle = styled.div`

@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-export const Item = ({ el }: { el: any }) => {
+export const Item = ({ el, usdt }: { el: any; usdt: any }) => {
+  const [per, setPer] = useState<number>(0);
+  const [color, setColor] = useState<string>("#000");
+  useEffect(() => {
+    if (el.upbit > el.binance) {
+      setPer(((el.upbit - el.binance) / el.binance) * 100);
+      setColor("#ff0000");
+    } else {
+      setPer(((el.binance - el.upbit) / el.binance) * 100);
+      setColor("#000");
+    }
+  }, [el]);
+
   return (
     <StyledContainer>
       <StyledItemBox>{el?.name}</StyledItemBox>
-      <StyledItemBox>{el.binance}</StyledItemBox>
-      <StyledItemBox>{el?.upbit}</StyledItemBox>
-      <StyledItemBox>시세차이</StyledItemBox>
-      <StyledItemBox>퍼센티지</StyledItemBox>
+      <StyledItemBox>{~~(el.binance * usdt)}</StyledItemBox>
+      <StyledItemBox> {el?.upbit}</StyledItemBox>
+      <StyledItemBox>{el?.upbit - ~~(el.binance * usdt)}</StyledItemBox>
+      <StyledItemBox>per</StyledItemBox>
     </StyledContainer>
   );
 };
