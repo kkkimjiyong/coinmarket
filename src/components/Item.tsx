@@ -74,6 +74,10 @@ const StyledItemBox = styled.div<{ larger: string }>`
   align-items: center;
   justify-content: start;
   flex: 1;
+  @media screen and (max-width: 450px) {
+    font-size: 12px;
+    font-weight: 700;
+  }
   &.binance {
     color: ${({ larger }) => (larger === "binance" ? "red" : "blue")};
     font-weight: ${({ larger }) => larger === "binance" && "700"};

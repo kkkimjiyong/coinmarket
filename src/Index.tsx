@@ -272,11 +272,11 @@ export const Index = () => {
 
         <StyledHeaderContainer>
           <StyledExchaneBox>
-            BTC-KRW(업비트)
+            BTC-KRW
             <div className="number">{upBtc}</div>
           </StyledExchaneBox>
           <StyledExchaneBox>
-            BTC_USDT(바이낸스)
+            BTC_USDT
             <div className="number">{Number(binanceBtc)?.toFixed(2)}</div>
           </StyledExchaneBox>
           <StyledExchaneBox>
@@ -338,13 +338,14 @@ const StyledTempWrap = styled.div`
 
 const StyledOptionBox = styled.div`
   margin-top: 10px;
-  min-width: 500px;
+
   width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
   font-weight: 700;
+
   .reloadBox {
     display: flex;
     align-items: center;
@@ -360,7 +361,6 @@ const StyledOptionBox = styled.div`
 const StyledHeaderContainer = styled.div`
   flex: none;
   margin: 20px auto;
-  min-width: 500px;
   width: 90%;
   height: 100px;
   background-color: #0e162d;
@@ -377,7 +377,14 @@ const StyledExchaneBox = styled.div`
   align-items: center;
   margin-top: 15px;
   /* justify-content: space-around; */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-weight: 700;
+  @media screen and (max-width: 450px) {
+    font-size: 12px;
+    font-weight: 700;
+  }
   .number {
     color: #c5c7da;
     margin-top: 15px;
@@ -399,6 +406,9 @@ const StyledTitle = styled.div`
   background-color: #0e162d;
   border-radius: 10px;
   display: flex;
+  @media screen and (max-width: 450px) {
+    padding: 0px 5px;
+  }
 `;
 
 const StyledTitleItem = styled.div`
@@ -408,11 +418,20 @@ const StyledTitleItem = styled.div`
   justify-content: start;
   flex: 1;
   font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  @media screen and (max-width: 450px) {
+    font-size: 12px;
+    font-weight: 700;
+  }
   .upbit {
+    margin-left: -5px;
     margin-right: 5px;
     width: 20%;
   }
   .binance {
+    margin-left: -5px;
     margin-right: 5px;
     width: 15%;
   }
