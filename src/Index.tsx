@@ -190,11 +190,7 @@ export const Index = () => {
           .filter((el: any, idx: any, arr: any) => {
             return arr.findIndex((item: any) => item.name === el.name) === idx;
           });
-        console.log(
-          "업비트소켓 이름리스트",
-          newUpbitList.length,
-          upbitCoinList.length
-        );
+
         console.log(newUpbitList, upbitCoinList);
         let newBinanceList: any = binanceSocketList.current?.filter(
           (el: any) => {
@@ -223,6 +219,7 @@ export const Index = () => {
             }
           }
         });
+        console.log(firstRender);
         setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
         let filteredList = [...firstRender];
         let lastBTC = filteredList.filter((el: any) => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import MASK from "../assets/image/MASK.png";
 
 export const Item = ({
   el,
@@ -33,6 +34,9 @@ export const Item = ({
       }
     >
       <StyledItemBox larger={larger} className="coinName">
+        <StyledImgBack>
+          <img className="img" src={`../${el?.name}.png`} alt="MASK" />
+        </StyledImgBack>{" "}
         {el?.name}
       </StyledItemBox>
       <StyledItemBox className="binance" larger={larger}>
@@ -82,5 +86,19 @@ const StyledItemBox = styled.div<{ larger: string }>`
   &.coinName {
     /* font-weight: 700; */
     /* font-size: 20px; */
+  }
+`;
+const StyledImgBack = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  margin-left: -10px;
+  margin-right: 10px;
+  .img {
+    width: 20px;
   }
 `;
