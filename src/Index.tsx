@@ -299,10 +299,10 @@ export const Index = () => {
             BTC_USDT
             <div className="number">{Number(binanceBtc)?.toFixed(2)}</div>
           </StyledExchaneBox>
-          <StyledExchaneBox>
+          {/* <StyledExchaneBox>
             시세차이 per{}
             <div className="number">{~~(upBtc - binanceBtc * usdt)}원</div>
-          </StyledExchaneBox>
+          </StyledExchaneBox> */}
           <StyledExchaneBox>
             USDT환율 <div className="number">{usdt?.toFixed(2)}</div>
           </StyledExchaneBox>
@@ -317,7 +317,7 @@ export const Index = () => {
             <img className="upbit" src={upbit} alt="바이낸스" />
             업비트
           </StyledTitleItem>
-          <StyledTitleItem>시세차이</StyledTitleItem>
+          <StyledTitleItem>매수잔량</StyledTitleItem>
           <StyledTitleItem>김프</StyledTitleItem>
         </StyledTitle>
         {firstRenderList.map((el: any) => {
