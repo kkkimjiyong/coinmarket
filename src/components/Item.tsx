@@ -47,7 +47,9 @@ export const Item = ({
       <StyledItemBox larger={larger}>
         {(el?.upbit - el.binance * usdt).toFixed(2)}
       </StyledItemBox>
-      <StyledItemBox larger={larger}>per</StyledItemBox>
+      <StyledItemBox className="per" larger={larger}>
+        {((el?.upbit / (el.binance * usdt) - 1) * 100).toFixed(2)}%
+      </StyledItemBox>
     </StyledContainer>
   );
 };
@@ -80,9 +82,13 @@ const StyledItemBox = styled.div<{ larger: string }>`
   }
   &.binance {
     color: ${({ larger }) => (larger === "binance" ? "red" : "blue")};
-    font-weight: ${({ larger }) => larger === "binance" && "700"};
+    /* font-weight: ${({ larger }) => larger === "binance" && "700"}; */
   }
   &.upbit {
+    color: ${({ larger }) => (larger === "upbit" ? "red" : "blue")};
+    /* font-weight: ${({ larger }) => larger === "upbit" && "700"}; */
+  }
+  &.per {
     color: ${({ larger }) => (larger === "upbit" ? "red" : "blue")};
     font-weight: ${({ larger }) => larger === "upbit" && "700"};
   }
