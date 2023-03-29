@@ -45,7 +45,7 @@ export const Item = ({
         {el?.upbit}
       </StyledItemBox>
       <StyledItemBox larger={larger}>
-        {(el?.upbit - el.binance * usdt).toFixed(2)}
+        {Number(el.upbit_bidSize).toFixed(2)}
       </StyledItemBox>
       <StyledItemBox className="per" larger={larger}>
         {((el?.upbit / (el.binance * usdt) - 1) * 100).toFixed(2)}%

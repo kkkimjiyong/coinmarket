@@ -29,7 +29,6 @@ export const Index = () => {
     "AXSUSDT",
   ];
   const upbitCoinList = [
-    "USDT-BTC",
     "KRW-BTC",
     "KRW-MASK",
     "KRW-OMG",
@@ -45,6 +44,23 @@ export const Index = () => {
     "KRW-ADA",
     "KRW-SOL",
     "KRW-AXS",
+  ];
+  const upbitSocketCoinList = [
+    "KRW-BTC.1",
+    "KRW-MASK.1",
+    "KRW-OMG.1",
+    "KRW-XRP.1",
+    "KRW-NEO.1",
+    "KRW-SAND.1",
+    "KRW-ETC.1",
+    "KRW-APT.1",
+    "KRW-SXP.1",
+    "KRW-LOOM.1",
+    "KRW-CELO.1",
+    "KRW-DOGE.1",
+    "KRW-ADA.1",
+    "KRW-SOL.1",
+    "KRW-AXS.1",
   ];
 
   console.log(upbitCoinList.join(","));
@@ -144,7 +160,7 @@ export const Index = () => {
       const upbitSocket = new WebSocket("wss://api.upbit.com/websocket/v1");
       upbitSocket.onopen = (e: any) => {
         upbitSocket.send(
-          `[{"ticket":"test"},{"type":"ticker","codes":[${upbitCoinList.join(
+          `[{"ticket":"test"},{"type":"orderbook","codes":[${upbitSocketCoinList.join(
             ","
           )}]},{"format":"SIMPLE"}]`
         );
@@ -152,9 +168,11 @@ export const Index = () => {
       upbitSocket.onmessage = (e: any) => {
         e.data.text().then((data: any) => {
           const response: any = JSON.parse(data);
+          console.log(response);
           upbitSocketList.current.push({
             name: response.cd,
-            upbit: response.tp,
+            upbit: response.obu[0].bp,
+            upbit_bidSize: response.obu[0].bs,
           });
         });
       };
@@ -208,6 +226,7 @@ export const Index = () => {
             let newUpbitName = newUpbitList[i].name.split("").slice(4).join("");
             if (el.name === newUpbitName) {
               el.upbit = newUpbitList[i].upbit;
+              el.upbit_bidSize = newUpbitList[i].upbit_bidSize;
             }
           }
           for (let j = 0; j < newBinanceList.length; j++) {
@@ -222,6 +241,7 @@ export const Index = () => {
             }
           }
         });
+        console.log(firstRender);
         setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
         let filteredList = [...firstRender];
         let lastBTC = filteredList.filter((el: any) => {
