@@ -53,9 +53,19 @@ export const Index = () => {
   const [firstBinance, setFirstBinance] = useState<any>();
   const [firstRenderList, setFirstRenderList] = useState<any>([]);
 
-  //업비트 usdt환율 가져오기
+  //finex usd환율 가져오기
   const [upBtc, setUpBtc] = useState<any>();
   const [usdt, setUsdt] = useState<any>();
+  const getUsdExchange = async () => {
+    try {
+      const response = await axios.get(
+        "https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD"
+      );
+      console.log("환율", response.data[0].basePrice);
+      setUsdt(response.data[0].basePrice);
+    } catch (error) {}
+  };
+
   const getUpbitAllList = async () => {
     setIsLoading(true);
     try {
@@ -63,14 +73,6 @@ export const Index = () => {
         `https://api.upbit.com/v1/ticker?markets=${upbitCoinList.join(",")}`
       );
       setFirstUpbit(response.data);
-      let KRWBTC = response.data.filter((el: any) => {
-        return el.market === "KRW-BTC";
-      })[0];
-      let USDTBTC = response.data.filter((el: any) => {
-        return el.market === "USDT-BTC";
-      })[0];
-      setUpBtc(KRWBTC.trade_price);
-      setUsdt(KRWBTC.trade_price / USDTBTC.trade_price);
       setTimeout(() => {
         setIsLoading(false);
       }, 1200);
@@ -102,6 +104,7 @@ export const Index = () => {
   };
 
   useEffect(() => {
+    getUsdExchange();
     getUpbitAllList();
     getBinanceAllList();
   }, []);
@@ -219,7 +222,6 @@ export const Index = () => {
             }
           }
         });
-        console.log(firstRender);
         setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
         let filteredList = [...firstRender];
         let lastBTC = filteredList.filter((el: any) => {
@@ -228,9 +230,6 @@ export const Index = () => {
         let lastUSDTBTC = newUpbitList.filter((el: any) => {
           return el.name === "USDT-BTC";
         });
-        if (lastUSDTBTC.length > 0) {
-          setUsdt(lastBTC[0].upbit / lastUSDTBTC[0].upbit);
-        }
 
         setUpBtc(lastBTC[0].upbit);
         setBinanceBtc(lastBTC[0].binance);
@@ -277,11 +276,11 @@ export const Index = () => {
             <div className="number">{upBtc}</div>
           </StyledExchaneBox>
           <StyledExchaneBox>
-            BTC_KRW(바이낸스)
-            <div className="number">{~~(binanceBtc * usdt)}</div>
+            BTC_USDT(바이낸스)
+            <div className="number">{Number(binanceBtc)?.toFixed(2)}</div>
           </StyledExchaneBox>
           <StyledExchaneBox>
-            시세차이 per{" "}
+            시세차이 per{}
             <div className="number">{~~(upBtc - binanceBtc * usdt)}원</div>
           </StyledExchaneBox>
           <StyledExchaneBox>

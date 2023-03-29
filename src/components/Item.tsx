@@ -19,7 +19,6 @@ export const Item = ({
     if (el.upbit > el.binance * usdt) {
       setPer(((el.upbit - el.binance) / el.binance) * 100);
       setLarger("upbit");
-      console.log("upbit");
     } else if (el.upbit < el.binance * usdt) {
       setPer(((el.binance - el.upbit) / el.binance) * 100);
       setLarger("binance");
