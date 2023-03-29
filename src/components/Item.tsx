@@ -39,13 +39,17 @@ export const Item = ({
         {el?.name}
       </StyledItemBox>
       <StyledItemBox className="binance" larger={larger}>
-        {~~(el.binance * usdt)}
+        {(~~(el.binance * usdt))
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </StyledItemBox>
       <StyledItemBox larger={larger} className="upbit">
-        {el?.upbit}
+        {el?.upbit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </StyledItemBox>
       <StyledItemBox larger={larger}>
-        {Number(el.upbit_bidSize).toFixed(2)}
+        {(~~(el.upbit_bidSize * el?.upbit))
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </StyledItemBox>
       <StyledItemBox className="per" larger={larger}>
         {((el?.upbit / (el.binance * usdt) - 1) * 100).toFixed(2)}%
