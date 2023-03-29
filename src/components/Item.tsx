@@ -18,12 +18,12 @@ export const Item = ({
     if (el.upbit > el.binance * usdt) {
       setPer(((el.upbit - el.binance) / el.binance) * 100);
       setLarger("upbit");
+      console.log("upbit");
     } else if (el.upbit < el.binance * usdt) {
       setPer(((el.binance - el.upbit) / el.binance) * 100);
       setLarger("binance");
     }
   }, [el]);
-  console.log(larger);
   return (
     <StyledContainer
       onClick={() =>
@@ -42,7 +42,7 @@ export const Item = ({
         {el?.upbit}
       </StyledItemBox>
       <StyledItemBox larger={larger}>
-        {el?.upbit - ~~(el.binance * usdt)}
+        {(el?.upbit - el.binance * usdt).toFixed(2)}
       </StyledItemBox>
       <StyledItemBox larger={larger}>per</StyledItemBox>
     </StyledContainer>
@@ -50,6 +50,7 @@ export const Item = ({
 };
 
 const StyledContainer = styled.div`
+  flex: none;
   margin: 20px auto 0 auto;
   padding: 0px 20px;
   width: 90%;

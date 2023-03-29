@@ -22,8 +22,14 @@ export const Index = () => {
     "APTUSDT",
     "SXPUSDT",
     "LOOMUSDT",
+    "CELOUSDT",
+    "DOGEUSDT",
+    "ADAUSDT",
+    "SOLUSDT",
+    "AXSUSDT",
   ];
   const upbitCoinList = [
+    "USDT-BTC",
     "KRW-BTC",
     "KRW-MASK",
     "KRW-OMG",
@@ -34,7 +40,14 @@ export const Index = () => {
     "KRW-APT",
     "KRW-SXP",
     "KRW-LOOM",
+    "KRW-CELO",
+    "KRW-DOGE",
+    "KRW-ADA",
+    "KRW-SOL",
+    "KRW-AXS",
   ];
+
+  console.log(upbitCoinList.join(","));
 
   const [firstUpbit, setFirstUpbit] = useState<any>();
   const [firstBinance, setFirstBinance] = useState<any>();
@@ -47,7 +60,7 @@ export const Index = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        "https://api.upbit.com/v1/ticker?markets=USDT-BTC,KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP,KRW-NEO,KRW-SAND,KRW-ETC,KRW-APT,KRW-SXP,KRW-LOOM"
+        `https://api.upbit.com/v1/ticker?markets=${upbitCoinList.join(",")}`
       );
       setFirstUpbit(response.data);
       let KRWBTC = response.data.filter((el: any) => {
@@ -95,7 +108,6 @@ export const Index = () => {
 
   useEffect(() => {
     if (!isLoading && !isLoading1) {
-      console.log("첫번째 데이터 가공 시작");
       setFirstRenderList(() => {
         let newData = [];
         for (let i = 0; i < binanceCoinList.length; i++) {
@@ -118,7 +130,6 @@ export const Index = () => {
         }
         return newData;
       });
-      console.log("끝");
     }
   }, [isLoading, isLoading1]);
 
@@ -130,7 +141,9 @@ export const Index = () => {
       const upbitSocket = new WebSocket("wss://api.upbit.com/websocket/v1");
       upbitSocket.onopen = (e: any) => {
         upbitSocket.send(
-          '[{"ticket":"test"},{"type":"ticker","codes":[USDT-BTC,KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP,KRW-NEO,KRW-SAND,KRW-ETC,KRW-NU,KRW-APT,KRW-SXP,KRW-LOOM]},{"format":"SIMPLE"}]'
+          `[{"ticket":"test"},{"type":"ticker","codes":[${upbitCoinList.join(
+            ","
+          )}]},{"format":"SIMPLE"}]`
         );
       };
       upbitSocket.onmessage = (e: any) => {
@@ -177,7 +190,12 @@ export const Index = () => {
           .filter((el: any, idx: any, arr: any) => {
             return arr.findIndex((item: any) => item.name === el.name) === idx;
           });
-
+        console.log(
+          "업비트소켓 이름리스트",
+          newUpbitList.length,
+          upbitCoinList.length
+        );
+        console.log(newUpbitList, upbitCoinList);
         let newBinanceList: any = binanceSocketList.current?.filter(
           (el: any) => {
             if (binanceCoinList.includes(el.s)) {
@@ -205,10 +223,8 @@ export const Index = () => {
             }
           }
         });
-        console.log(firstRender);
         setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
         let filteredList = [...firstRender];
-        console.log(filteredList);
         let lastBTC = filteredList.filter((el: any) => {
           return el.name === "BTC";
         });
@@ -241,61 +257,64 @@ export const Index = () => {
 
   return (
     <StyledContainer>
+      {" "}
       {isLoading && isLoading1 && <Loading />}
-      <StyledOptionBox>
-        <div
-          className="reloadBox"
-          onClick={() => {
-            getUpbitAllList();
-            getBinanceAllList();
-          }}
-        >
-          리스트 새로고침
-          <TbReload className="reloadIcon" size={20} />
-        </div>
-        <div>현재시각 : {nowDate} </div>
-      </StyledOptionBox>
+      <StyledTempWrap>
+        <StyledOptionBox>
+          <div
+            className="reloadBox"
+            onClick={() => {
+              getUpbitAllList();
+              getBinanceAllList();
+            }}
+          >
+            리스트 새로고침
+            <TbReload className="reloadIcon" size={20} />
+          </div>
+          <div>현재시각 : {nowDate} </div>
+        </StyledOptionBox>
 
-      <StyledHeaderContainer>
-        <StyledExchaneBox>
-          BTC-KRW(업비트)
-          <div className="number">{upBtc}</div>
-        </StyledExchaneBox>
-        <StyledExchaneBox>
-          BTC_KRW(바이낸스)
-          <div className="number">{~~(binanceBtc * usdt)}</div>
-        </StyledExchaneBox>
-        <StyledExchaneBox>
-          시세차이 per{" "}
-          <div className="number">{~~(upBtc - binanceBtc * usdt)}원</div>
-        </StyledExchaneBox>
-        <StyledExchaneBox>
-          USDT환율 <div className="number">{usdt?.toFixed(2)}</div>
-        </StyledExchaneBox>
-      </StyledHeaderContainer>
-      <StyledTitle>
-        <StyledTitleItem>코인이름</StyledTitleItem>
-        <StyledTitleItem>
-          <img className="binance" src={binance} alt="바이낸스" />
-          바이낸스
-        </StyledTitleItem>
-        <StyledTitleItem>
-          <img className="upbit" src={upbit} alt="바이낸스" />
-          업비트
-        </StyledTitleItem>
-        <StyledTitleItem>시세차이</StyledTitleItem>
-        <StyledTitleItem>per</StyledTitleItem>
-      </StyledTitle>
-      {firstRenderList.map((el: any) => {
-        return (
-          <Item
-            el={el}
-            key={el.name}
-            usdt={usdt}
-            setFirstRenderList={setFirstRenderList}
-          />
-        );
-      })}
+        <StyledHeaderContainer>
+          <StyledExchaneBox>
+            BTC-KRW(업비트)
+            <div className="number">{upBtc}</div>
+          </StyledExchaneBox>
+          <StyledExchaneBox>
+            BTC_KRW(바이낸스)
+            <div className="number">{~~(binanceBtc * usdt)}</div>
+          </StyledExchaneBox>
+          <StyledExchaneBox>
+            시세차이 per{" "}
+            <div className="number">{~~(upBtc - binanceBtc * usdt)}원</div>
+          </StyledExchaneBox>
+          <StyledExchaneBox>
+            USDT환율 <div className="number">{usdt?.toFixed(2)}</div>
+          </StyledExchaneBox>
+        </StyledHeaderContainer>
+        <StyledTitle>
+          <StyledTitleItem>코인이름</StyledTitleItem>
+          <StyledTitleItem>
+            <img className="binance" src={binance} alt="바이낸스" />
+            바이낸스
+          </StyledTitleItem>
+          <StyledTitleItem>
+            <img className="upbit" src={upbit} alt="바이낸스" />
+            업비트
+          </StyledTitleItem>
+          <StyledTitleItem>시세차이</StyledTitleItem>
+          <StyledTitleItem>per</StyledTitleItem>
+        </StyledTitle>
+        {firstRenderList.map((el: any) => {
+          return (
+            <Item
+              el={el}
+              key={el.name}
+              usdt={usdt}
+              setFirstRenderList={setFirstRenderList}
+            />
+          );
+        })}
+      </StyledTempWrap>
     </StyledContainer>
   );
 };
@@ -305,8 +324,17 @@ const StyledContainer = styled.div`
   width: 100%;
   height: 100%;
   min-height: 100vh;
+  padding-bottom: 50px;
   overflow-y: scroll;
   background-color: #303550;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledTempWrap = styled.div`
+  width: 100%;
+  max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -334,6 +362,7 @@ const StyledOptionBox = styled.div`
 `;
 
 const StyledHeaderContainer = styled.div`
+  flex: none;
   margin: 20px auto;
   min-width: 500px;
   width: 90%;
