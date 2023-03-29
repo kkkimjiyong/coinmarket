@@ -317,7 +317,7 @@ export const Index = () => {
             <img className="upbit" src={upbit} alt="바이낸스" />
             업비트
           </StyledTitleItem>
-          <StyledTitleItem>매수잔량</StyledTitleItem>
+          <StyledTitleItem>매수가총액</StyledTitleItem>
           <StyledTitleItem>김프</StyledTitleItem>
         </StyledTitle>
         {firstRenderList.map((el: any) => {
