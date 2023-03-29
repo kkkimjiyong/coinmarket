@@ -61,6 +61,7 @@ const StyledContainer = styled.div`
   width: 90%;
   height: 50px;
   background-color: #0e162d;
+
   border-radius: 10px;
   display: flex;
   :hover {
@@ -76,20 +77,21 @@ const StyledItemBox = styled.div<{ larger: string }>`
   align-items: center;
   justify-content: start;
   flex: 1;
+  /* color: #e0e0e0d5; */
   @media screen and (max-width: 450px) {
     font-size: 12px;
     font-weight: 700;
   }
   &.binance {
-    color: ${({ larger }) => (larger === "binance" ? "red" : "blue")};
+    /* color: ${({ larger }) => (larger === "binance" ? "green" : "red")}; */
     /* font-weight: ${({ larger }) => larger === "binance" && "700"}; */
   }
   &.upbit {
-    color: ${({ larger }) => (larger === "upbit" ? "red" : "blue")};
+    /* color: ${({ larger }) => (larger === "upbit" ? "green" : "red")}; */
     /* font-weight: ${({ larger }) => larger === "upbit" && "700"}; */
   }
   &.per {
-    color: ${({ larger }) => (larger === "upbit" ? "red" : "blue")};
+    color: ${({ larger }) => (larger === "upbit" ? "#64c9bf" : "#ad5c59")};
     font-weight: ${({ larger }) => larger === "upbit" && "700"};
   }
   &.coinName {

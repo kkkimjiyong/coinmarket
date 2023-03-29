@@ -298,7 +298,7 @@ export const Index = () => {
             업비트
           </StyledTitleItem>
           <StyledTitleItem>시세차이</StyledTitleItem>
-          <StyledTitleItem>per</StyledTitleItem>
+          <StyledTitleItem>김프</StyledTitleItem>
         </StyledTitle>
         {firstRenderList.map((el: any) => {
           return (
