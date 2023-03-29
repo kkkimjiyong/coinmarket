@@ -5,6 +5,7 @@ import binance from "./assets/image/binance.png";
 import upbit from "./assets/image/upbit.png";
 import axios from "axios";
 import { Loading } from "./components/Loading";
+import { TbReload } from "react-icons/tb";
 
 export const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -43,12 +44,12 @@ export const Index = () => {
   const [upBtc, setUpBtc] = useState<any>();
   const [usdt, setUsdt] = useState<any>();
   const getUpbitAllList = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(
         "https://api.upbit.com/v1/ticker?markets=USDT-BTC,KRW-BTC,KRW-MASK,KRW-OMG,KRW-XRP,KRW-NEO,KRW-SAND,KRW-ETC,KRW-APT,KRW-SXP,KRW-LOOM"
       );
       setFirstUpbit(response.data);
-      console.log(response);
       let KRWBTC = response.data.filter((el: any) => {
         return el.market === "KRW-BTC";
       })[0];
@@ -66,6 +67,7 @@ export const Index = () => {
   const [binanceBtc, setBinanceBtc] = useState<any>();
 
   const getBinanceAllList = async () => {
+    setIsLoading1(true);
     try {
       const response: any = await axios.get(
         "https://api.binance.com/api/v3/ticker/24hr"
@@ -226,10 +228,34 @@ export const Index = () => {
       clearInterval(interval);
     };
   }, [isLoading, isLoading1, firstRenderList]);
+  //현재시각
+  let today = new Date();
+
+  let year = today.getFullYear(); // 년도
+  let month = today.getMonth() + 1; // 월
+  let date = today.getDate(); // 날짜
+  let hour = today.getHours(); // 요일
+  let minute = today.getMinutes(); // 요일
+  let second = today.getSeconds(); // 요일
+  let nowDate = `${year}/${month}/${date}/${hour}:${minute}:${second}`;
 
   return (
     <StyledContainer>
       {isLoading && isLoading1 && <Loading />}
+      <StyledOptionBox>
+        <div
+          className="reloadBox"
+          onClick={() => {
+            getUpbitAllList();
+            getBinanceAllList();
+          }}
+        >
+          리스트 새로고침
+          <TbReload className="reloadIcon" size={20} />
+        </div>
+        <div>현재시각 : {nowDate} </div>
+      </StyledOptionBox>
+
       <StyledHeaderContainer>
         <StyledExchaneBox>
           BTC-KRW(업비트)
@@ -261,7 +287,14 @@ export const Index = () => {
         <StyledTitleItem>per</StyledTitleItem>
       </StyledTitle>
       {firstRenderList.map((el: any) => {
-        return <Item el={el} key={el.name} usdt={usdt} />;
+        return (
+          <Item
+            el={el}
+            key={el.name}
+            usdt={usdt}
+            setFirstRenderList={setFirstRenderList}
+          />
+        );
       })}
     </StyledContainer>
   );
@@ -274,6 +307,30 @@ const StyledContainer = styled.div`
   min-height: 100vh;
   overflow-y: scroll;
   background-color: #303550;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledOptionBox = styled.div`
+  margin-top: 10px;
+  min-width: 500px;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  .reloadBox {
+    display: flex;
+    align-items: center;
+    :hover {
+      cursor: pointer;
+    }
+  }
+  .reloadIcon {
+    margin-left: 5px;
+  }
 `;
 
 const StyledHeaderContainer = styled.div`

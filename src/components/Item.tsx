@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
-export const Item = ({ el, usdt }: { el: any; usdt: any }) => {
+export const Item = ({
+  el,
+  usdt,
+  setFirstRenderList,
+}: {
+  setFirstRenderList: React.Dispatch<React.SetStateAction<any>>;
+  el: any;
+  usdt: any;
+}) => {
   const [per, setPer] = useState<number>(0);
   const [larger, setLarger] = useState<string>("");
   const [upBitColor, setUpBitColor] = useState<string>("#000");
@@ -17,7 +25,13 @@ export const Item = ({ el, usdt }: { el: any; usdt: any }) => {
   }, [el]);
   console.log(larger);
   return (
-    <StyledContainer>
+    <StyledContainer
+      onClick={() =>
+        setFirstRenderList((prev: any) => {
+          return prev.filter((item: any) => item.name !== el.name);
+        })
+      }
+    >
       <StyledItemBox larger={larger} className="coinName">
         {el?.name}
       </StyledItemBox>
@@ -41,9 +55,13 @@ const StyledContainer = styled.div`
   width: 90%;
   height: 50px;
   background-color: #0e162d;
-  /* box-shadow: 5px 3px 10px 0px #afaeae; */
   border-radius: 10px;
   display: flex;
+  :hover {
+    background-color: #101a37;
+    box-shadow: 5px 3px 10px 0px black;
+    cursor: pointer;
+  }
 `;
 
 const StyledItemBox = styled.div<{ larger: string }>`
