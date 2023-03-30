@@ -11,16 +11,16 @@ export const Login = () => {
 
   const onLoginHandler = async () => {
     try {
-      const { data } = await supabase
+      const { data }: any = await supabase
         .from("user")
-        .select("num")
+        .select("admin")
         .eq("id", id)
         .eq("pw", pw);
       console.log(data);
-      if (data?.length === 1) {
+      if (data?.length === 1 && data[0].admin) {
         navigate("/main");
       } else {
-        alert("없는 회원입니다");
+        alert("없는 회원이거나 등록되지 않은 회원입니다");
       }
     } catch (error) {
       console.log(error);

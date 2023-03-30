@@ -5,6 +5,7 @@ import Army from "../../public/Army.png";
 import { Loading } from "../components/Loading";
 import { supabase } from "../lib/supabase";
 import { IoMdClose } from "react-icons/io";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 export const AdminUsers = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export const AdminUsers = () => {
   const [clickedUser, setClickedUser] = useState<any>();
   const getUsers = async () => {
     try {
-      const { data, error } = await supabase.from("user").select(`id,pw`);
+      const { data, error } = await supabase.from("user").select(`id,pw,admin`);
       console.log(data);
       setUsers(data);
       setTimeout(() => {
@@ -29,30 +30,63 @@ export const AdminUsers = () => {
         .delete()
         .eq("id", user.id)
         .eq("pw", user.pw)
-        .select("id,pw");
+        .select("id,pw,admin");
       alert("삭제되었습니다");
-      setUsers(data);
+      setUsers((prev: any) => {
+        return prev.filter((item: any) => item !== user);
+      });
     } catch (error) {}
   };
-
+  const acceptUser = async (user: any) => {
+    try {
+      const { data, error } = await supabase
+        .from("user")
+        .update({ admin: true })
+        .eq("id", user.id)
+        .select("id,pw,admin");
+      alert("등록되었습니다");
+      setUsers((prev: any) => {
+        return prev.map((item: any) => {
+          if (item === user) {
+            return { ...item, admin: true };
+          } else {
+            return item;
+          }
+        });
+      });
+    } catch (error) {}
+  };
   useEffect(() => {
     getUsers();
   }, []);
+  console.log(users);
   return (
     <Container>
       {isLoading && <Loading />}
       <Background />
-      <WhiteBackground />
-      <img className="img" src={Army} alt="메인이미지" />
-      <Header>클릭 시, 회원이 삭제됩니다.</Header>
+      <Header>클릭 시, 회원등록이 됩니다.</Header>
       {users?.map((el: any) => {
-        return (
-          <UserBox onClick={() => deleteUser(el)}>
-            <UserItem>{el.id}</UserItem>
-            <UserItem>{el.pw}</UserItem>
-            <IoMdClose />
-          </UserBox>
-        );
+        if (!el.admin) {
+          return (
+            <UserBox onClick={() => acceptUser(el)}>
+              <UserItem>{el.id}</UserItem>
+              <UserItem>{el.pw}</UserItem>
+              <MdAdminPanelSettings className="icon" size={20} />
+            </UserBox>
+          );
+        }
+      })}
+      <Header className="bottom">클릭 시, 회원이 삭제됩니다.</Header>
+      {users?.map((el: any) => {
+        if (el.admin) {
+          return (
+            <UserBox onClick={() => deleteUser(el)}>
+              <UserItem>{el.id}</UserItem>
+              <UserItem>{el.pw}</UserItem>
+              <IoMdClose size={20} />
+            </UserBox>
+          );
+        }
       })}
     </Container>
   );
@@ -64,7 +98,6 @@ const Container = styled.div`
   background-color: #303550;
   display: flex;
   align-items: center;
-  justify-content: center;
   flex-direction: column;
   .img {
     z-index: 3;
@@ -106,7 +139,7 @@ const Background = styled.div`
 
 const Header = styled.div`
   z-index: 4;
-  margin-top: 15px;
+  margin-top: 80px;
   width: 80%;
   max-width: 300px;
   height: 40px;
@@ -148,6 +181,9 @@ const UserBox = styled.div`
   }
   &.header {
     color: gray;
+  }
+  .icon {
+    color: whites;
   }
 `;
 

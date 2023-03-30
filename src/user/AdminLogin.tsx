@@ -2,17 +2,27 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Army from "../../public/Army.png";
+import { supabase } from "../lib/supabase";
 
 export const AdminLogin = () => {
   const navigate = useNavigate();
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
-
-  const onLoginHandler = () => {
-    if (id === "y11yny11k" && pw === "Pjhssh!6848") {
-      navigate("/admin/users");
-    } else {
-      alert("관리자가 아닙니다");
+  const onLoginHandler = async () => {
+    try {
+      const { data } = await supabase
+        .from("admin")
+        .select("num")
+        .eq("id", id)
+        .eq("pw", pw);
+      console.log(data);
+      if (data?.length === 1) {
+        navigate("/admin/users");
+      } else {
+        alert("관리자가 아닙니다");
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
