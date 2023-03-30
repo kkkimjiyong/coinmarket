@@ -13,15 +13,23 @@ export const Item = ({
 }) => {
   const [per, setPer] = useState<number>(0);
   const [larger, setLarger] = useState<string>("");
-  const [upBitColor, setUpBitColor] = useState<string>("#000");
-  const [binanceColor, setBinanceColor] = useState<string>("#000");
+  const [color, setColor] = useState<string>("");
   useEffect(() => {
     if (el.upbit > el.binance * usdt) {
-      setPer(((el.upbit - el.binance) / el.binance) * 100);
       setLarger("upbit");
+      setColor("#6dc888");
+      if (el.per > 2) {
+        setColor(" #d95561");
+        return;
+      } else if (el.per > 1.5) {
+        setColor(" #e19c3a");
+        return;
+      }
     } else if (el.upbit < el.binance * usdt) {
-      setPer(((el.binance - el.upbit) / el.binance) * 100);
       setLarger("binance");
+      if (el.per < -1.5) {
+        setColor("#4d83ff");
+      }
     }
   }, [el]);
   return (
@@ -47,13 +55,14 @@ export const Item = ({
         {el?.upbit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </StyledItemBox>
       <StyledItemBox larger={larger}>
-        {(~~(el.upbit_bidSize * el?.upbit))
+        {(el.upbit_bidSize * el?.upbit)
+          .toFixed(0)
           .toString()
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </StyledItemBox>
-      <StyledItemBox className="per" larger={larger}>
-        {((el?.upbit / (el.binance * usdt) - 1) * 100).toFixed(2)}%
-      </StyledItemBox>
+      <StyledPerBox className="per" larger={larger} color={color}>
+        {el.per?.toFixed(2)}%
+      </StyledPerBox>
     </StyledContainer>
   );
 };
@@ -65,7 +74,7 @@ const StyledContainer = styled.div`
   width: 90%;
   height: 50px;
   background-color: #0e162d;
-
+  color: #e19c3a;
   border-radius: 10px;
   display: flex;
   :hover {
@@ -86,21 +95,23 @@ const StyledItemBox = styled.div<{ larger: string }>`
     font-size: 12px;
     font-weight: 700;
   }
-  &.binance {
-    /* color: ${({ larger }) => (larger === "binance" ? "green" : "red")}; */
-    /* font-weight: ${({ larger }) => larger === "binance" && "700"}; */
+`;
+
+const StyledPerBox = styled.div<{ larger: string; color: string }>`
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex: 1;
+  /* color: #e0e0e0d5; */
+  @media screen and (max-width: 450px) {
+    font-size: 12px;
+    font-weight: 700;
   }
-  &.upbit {
-    /* color: ${({ larger }) => (larger === "upbit" ? "green" : "red")}; */
-    /* font-weight: ${({ larger }) => larger === "upbit" && "700"}; */
-  }
+
   &.per {
-    color: ${({ larger }) => (larger === "upbit" ? "#64c9bf" : "#ad5c59")};
+    color: ${({ color }) => `${color}`};
     font-weight: ${({ larger }) => larger === "upbit" && "700"};
-  }
-  &.coinName {
-    /* font-weight: 700; */
-    /* font-size: 20px; */
   }
 `;
 const StyledImgBack = styled.div`

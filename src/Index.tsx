@@ -168,7 +168,6 @@ export const Index = () => {
       upbitSocket.onmessage = (e: any) => {
         e.data.text().then((data: any) => {
           const response: any = JSON.parse(data);
-          console.log(response);
           upbitSocketList.current.push({
             name: response.cd,
             upbit: response.obu[0].bp,
@@ -240,15 +239,14 @@ export const Index = () => {
               el.binance = newBinanceList[j].c;
             }
           }
+          el.per = (el.upbit / (el.binance * usdt) - 1) * 100;
         });
+        firstRender.map;
         console.log(firstRender);
         setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
         let filteredList = [...firstRender];
         let lastBTC = filteredList.filter((el: any) => {
           return el.name === "BTC";
-        });
-        let lastUSDTBTC = newUpbitList.filter((el: any) => {
-          return el.name === "USDT-BTC";
         });
 
         setUpBtc(lastBTC[0].upbit);
@@ -318,18 +316,26 @@ export const Index = () => {
             업비트
           </StyledTitleItem>
           <StyledTitleItem>매수가총액</StyledTitleItem>
-          <StyledTitleItem>김프</StyledTitleItem>
+          <StyledTitleItem>보따리각</StyledTitleItem>
         </StyledTitle>
-        {firstRenderList.map((el: any) => {
-          return (
-            <Item
-              el={el}
-              key={el.name}
-              usdt={usdt}
-              setFirstRenderList={setFirstRenderList}
-            />
-          );
-        })}
+        {firstRenderList
+          .sort((a: any, b: any) => {
+            if (a.per > b.per) return -1;
+            if (a.per === b.per) return 0;
+            if (a.per < b.per) return 1;
+          })
+          .filter((el: any) => el.per < -1.5)
+          .concat(firstRenderList.filter((el: any) => el.per > -1.5))
+          .map((el: any) => {
+            return (
+              <Item
+                el={el}
+                key={el.name}
+                usdt={usdt}
+                setFirstRenderList={setFirstRenderList}
+              />
+            );
+          })}
       </StyledTempWrap>
     </StyledContainer>
   );
