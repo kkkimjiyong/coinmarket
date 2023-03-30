@@ -27,6 +27,8 @@ export const Index = () => {
     "ADAUSDT",
     "SOLUSDT",
     "AXSUSDT",
+    "TRXUSDT",
+    "ATOMUSDT",
   ];
   const upbitCoinList = [
     "KRW-BTC",
@@ -44,6 +46,8 @@ export const Index = () => {
     "KRW-ADA",
     "KRW-SOL",
     "KRW-AXS",
+    "KRW-TRX",
+    "KRW-ATOM",
   ];
   const upbitSocketCoinList = [
     "KRW-BTC.1",
@@ -61,6 +65,8 @@ export const Index = () => {
     "KRW-ADA.1",
     "KRW-SOL.1",
     "KRW-AXS.1",
+    "KRW-TRX.1",
+    "KRW-ATOM.1",
   ];
 
   console.log(upbitCoinList.join(","));
