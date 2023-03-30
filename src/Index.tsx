@@ -6,6 +6,8 @@ import upbit from "./assets/image/upbit.png";
 import axios from "axios";
 import { Loading } from "./components/Loading";
 import { TbReload } from "react-icons/tb";
+import { FaVolumeMute } from "react-icons/fa";
+import { ImVolumeMute } from "react-icons/im";
 
 export const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -269,6 +271,8 @@ export const Index = () => {
   let second = today.getSeconds(); // 요일
   let nowDate = `${year}/${month}/${date}/${hour}:${minute}:${second}`;
 
+  //!====================== 소리끄기  ========================
+  const [mute, setMute] = useState<boolean>(false);
   return (
     <StyledContainer>
       {" "}
@@ -284,6 +288,10 @@ export const Index = () => {
           >
             리스트 새로고침
             <TbReload className="reloadIcon" size={20} />
+          </div>
+          <div onClick={() => setMute(!mute)} className="muteBox">
+            소리{!mute ? "끄기" : "켜기"}{" "}
+            {!mute ? <FaVolumeMute size={20} /> : <ImVolumeMute size={20} />}{" "}
           </div>
           <div>현재시각 : {nowDate} </div>
         </StyledOptionBox>
@@ -329,7 +337,9 @@ export const Index = () => {
           .map((el: any) => {
             return (
               <Item
+                mute={mute}
                 el={el}
+                per={el.per}
                 key={el.name}
                 usdt={usdt}
                 setFirstRenderList={setFirstRenderList}
@@ -375,6 +385,14 @@ const StyledOptionBox = styled.div`
   .reloadBox {
     display: flex;
     align-items: center;
+    :hover {
+      cursor: pointer;
+    }
+  }
+  .muteBox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     :hover {
       cursor: pointer;
     }

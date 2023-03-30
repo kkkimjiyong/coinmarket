@@ -1,29 +1,39 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import MASK from "../assets/image/MASK.png";
+import useSound from "use-sound";
+import alarm from "../../public/alarm.mp3";
 
 export const Item = ({
   el,
   usdt,
+  per,
+  mute,
   setFirstRenderList,
 }: {
+  per: any;
+  mute: boolean;
   setFirstRenderList: React.Dispatch<React.SetStateAction<any>>;
   el: any;
   usdt: any;
 }) => {
-  const [per, setPer] = useState<number>(0);
   const [larger, setLarger] = useState<string>("");
   const [color, setColor] = useState<string>("");
+  const [play] = useSound(alarm);
   useEffect(() => {
     if (el.upbit > el.binance * usdt) {
       setLarger("upbit");
-      setColor("#6dc888");
       if (el.per > 2) {
         setColor(" #d95561");
+        if (!mute) {
+          play();
+        }
         return;
       } else if (el.per > 1.5) {
         setColor(" #e19c3a");
         return;
+      } else {
+        console.log(el.per);
+        setColor("#6dc888");
       }
     } else if (el.upbit < el.binance * usdt) {
       setLarger("binance");
@@ -31,7 +41,7 @@ export const Item = ({
         setColor("#4d83ff");
       }
     }
-  }, [el]);
+  }, [per, mute]);
   return (
     <StyledContainer
       onClick={() =>
