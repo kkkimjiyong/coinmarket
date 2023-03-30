@@ -74,7 +74,6 @@ const StyledContainer = styled.div`
   width: 90%;
   height: 50px;
   background-color: #0e162d;
-  color: #e19c3a;
   border-radius: 10px;
   display: flex;
   :hover {
