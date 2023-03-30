@@ -286,14 +286,21 @@ export const Index = () => {
               getBinanceAllList();
             }}
           >
-            리스트 새로고침
+            <span>리스트 새로고침</span>
             <TbReload className="reloadIcon" size={20} />
           </div>
           <div onClick={() => setMute(!mute)} className="muteBox">
-            소리{!mute ? "끄기" : "켜기"}{" "}
-            {!mute ? <FaVolumeMute size={20} /> : <ImVolumeMute size={20} />}{" "}
+            <span>소리{!mute ? "끄기" : "켜기"} </span>
+            {!mute ? (
+              <FaVolumeMute size={20} />
+            ) : (
+              <ImVolumeMute size={20} />
+            )}{" "}
           </div>
-          <div>현재시각 : {nowDate} </div>
+          <div>
+            {" "}
+            <span>현재시각 :</span> {nowDate}{" "}
+          </div>
         </StyledOptionBox>
 
         <StyledHeaderContainer>
@@ -374,14 +381,19 @@ const StyledTempWrap = styled.div`
 
 const StyledOptionBox = styled.div`
   margin-top: 10px;
-
   width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
   font-weight: 700;
-
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  span {
+    @media screen and (max-width: 480px) {
+      display: none;
+    }
+  }
   .reloadBox {
     display: flex;
     align-items: center;
@@ -393,6 +405,9 @@ const StyledOptionBox = styled.div`
     display: flex;
     align-items: center;
     gap: 5px;
+    @media screen and (max-width: 480px) {
+      margin-left: 50px;
+    }
     :hover {
       cursor: pointer;
     }
