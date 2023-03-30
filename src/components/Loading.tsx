@@ -23,6 +23,7 @@ const Container = styled.div`
   height: 100%;
   background-color: #17171bf9;
   opacity: 0.7;
+  z-index: 10;
 `;
 
 const RowLogo = styled.img`

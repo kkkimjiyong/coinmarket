@@ -6,6 +6,8 @@ import upbit from "./assets/image/upbit.png";
 import axios from "axios";
 import { Loading } from "./components/Loading";
 import { TbReload } from "react-icons/tb";
+import { FaVolumeMute } from "react-icons/fa";
+import { ImVolumeMute } from "react-icons/im";
 
 export const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -174,7 +176,6 @@ export const Index = () => {
       upbitSocket.onmessage = (e: any) => {
         e.data.text().then((data: any) => {
           const response: any = JSON.parse(data);
-          console.log(response);
           upbitSocketList.current.push({
             name: response.cd,
             upbit: response.obu[0].bp,
@@ -246,15 +247,14 @@ export const Index = () => {
               el.binance = newBinanceList[j].c;
             }
           }
+          el.per = (el.upbit / (el.binance * usdt) - 1) * 100;
         });
+        firstRender.map;
         console.log(firstRender);
         setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
         let filteredList = [...firstRender];
         let lastBTC = filteredList.filter((el: any) => {
           return el.name === "BTC";
-        });
-        let lastUSDTBTC = newUpbitList.filter((el: any) => {
-          return el.name === "USDT-BTC";
         });
 
         setUpBtc(lastBTC[0].upbit);
@@ -277,6 +277,8 @@ export const Index = () => {
   let second = today.getSeconds(); // 요일
   let nowDate = `${year}/${month}/${date}/${hour}:${minute}:${second}`;
 
+  //!====================== 소리끄기  ========================
+  const [mute, setMute] = useState<boolean>(false);
   return (
     <StyledContainer>
       {" "}
@@ -290,10 +292,21 @@ export const Index = () => {
               getBinanceAllList();
             }}
           >
-            리스트 새로고침
+            <span>리스트 새로고침</span>
             <TbReload className="reloadIcon" size={20} />
           </div>
-          <div>현재시각 : {nowDate} </div>
+          <div onClick={() => setMute(!mute)} className="muteBox">
+            <span>소리{!mute ? "끄기" : "켜기"} </span>
+            {!mute ? (
+              <FaVolumeMute size={20} />
+            ) : (
+              <ImVolumeMute size={20} />
+            )}{" "}
+          </div>
+          <div>
+            {" "}
+            <span>현재시각 :</span> {nowDate}{" "}
+          </div>
         </StyledOptionBox>
 
         <StyledHeaderContainer>
@@ -324,18 +337,28 @@ export const Index = () => {
             업비트
           </StyledTitleItem>
           <StyledTitleItem>매수가총액</StyledTitleItem>
-          <StyledTitleItem>김프</StyledTitleItem>
+          <StyledTitleItem>보따리각</StyledTitleItem>
         </StyledTitle>
-        {firstRenderList.map((el: any) => {
-          return (
-            <Item
-              el={el}
-              key={el.name}
-              usdt={usdt}
-              setFirstRenderList={setFirstRenderList}
-            />
-          );
-        })}
+        {firstRenderList
+          .sort((a: any, b: any) => {
+            if (a.per > b.per) return -1;
+            if (a.per === b.per) return 0;
+            if (a.per < b.per) return 1;
+          })
+          .filter((el: any) => el.per < -1.5)
+          .concat(firstRenderList.filter((el: any) => el.per > -1.5))
+          .map((el: any) => {
+            return (
+              <Item
+                mute={mute}
+                el={el}
+                per={el.per}
+                key={el.name}
+                usdt={usdt}
+                setFirstRenderList={setFirstRenderList}
+              />
+            );
+          })}
       </StyledTempWrap>
     </StyledContainer>
   );
@@ -364,17 +387,33 @@ const StyledTempWrap = styled.div`
 
 const StyledOptionBox = styled.div`
   margin-top: 10px;
-
   width: 90%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 12px;
   font-weight: 700;
-
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  span {
+    @media screen and (max-width: 480px) {
+      display: none;
+    }
+  }
   .reloadBox {
     display: flex;
     align-items: center;
+    :hover {
+      cursor: pointer;
+    }
+  }
+  .muteBox {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    @media screen and (max-width: 480px) {
+      margin-left: 50px;
+    }
     :hover {
       cursor: pointer;
     }

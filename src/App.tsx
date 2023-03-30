@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Router } from "./Router";
+import { Router } from "./shared/Router";
 
 function App() {
   if (import.meta.env.NODE_ENV === "production") {
