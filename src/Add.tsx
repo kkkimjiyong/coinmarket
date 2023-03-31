@@ -123,7 +123,7 @@ export const Add = () => {
   console.log(firstBinance);
   useEffect(() => {
     getUsdExchange();
-    // getUpbitAllList();
+    getUpbitAllList();
     getBinanceAllList();
   }, []);
 
