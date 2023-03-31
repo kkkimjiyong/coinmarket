@@ -712,7 +712,7 @@ export const Add = () => {
   ];
 
   let z = allUpbitList.filter((el: any) => el.market.substr(0, 3) === "KRW");
-  console.log(z);
+  console.log(z.length);
 
   const [binanceBtc, setBinanceBtc] = useState<any>();
 
