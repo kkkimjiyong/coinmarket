@@ -34,6 +34,95 @@ export const Index = () => {
     "TRXUSDT",
     "ATOMUSDT",
   ];
+
+  const Tbbinance = [
+    "BTCUSDT",
+    "ETHUSDT",
+    "NEOUSDT",
+    "MTLUSDT",
+    "XRPUSDT",
+    "ETCUSDT",
+    "OMGUSDT",
+    "WAVESUSDT",
+    "XEMUSDT",
+    "QTUMUSDT",
+    "LSKUSDT",
+    "STEEMUSDT",
+    "XLMUSDT",
+    "ARDRUSDT",
+    "STORJUSDT",
+    "REPUSDT",
+    "ADAUSDT",
+    "POWRUSDT",
+    "BTGUSDT",
+    "ICXUSDT",
+    "EOSUSDT",
+    "TRXUSDT",
+    "SCUSDT",
+    "ONTUSDT",
+    "ZILUSDT",
+    "POLYXUSDT",
+    "ZRXUSDT",
+    "LOOMUSDT",
+    "BCHUSDT",
+    "BATUSDT",
+    "IOSTUSDT",
+    "CVCUSDT",
+    "IOTAUSDT",
+    "HIFIUSDT",
+    "ONGUSDT",
+    "GASUSDT",
+    "ELFUSDT",
+    "KNCUSDT",
+    "THETAUSDT",
+    "QKCUSDT",
+    "BTTUSDT",
+    "ENJUSDT",
+    "TFUELUSDT",
+    "MANAUSDT",
+    "ANKRUSDT",
+    "ATOMUSDT",
+    "MBLUSDT",
+    "WAXPUSDT",
+    "HBARUSDT",
+    "STPTUSDT",
+    "VETUSDT",
+    "CHZUSDT",
+    "STMXUSDT",
+    "HIVEUSDT",
+    "KAVAUSDT",
+    "LINKUSDT",
+    "XTZUSDT",
+    "JSTUSDT",
+    "SXPUSDT",
+    "PLAUSDT",
+    "DOTUSDT",
+    "SRMUSDT",
+    "STRAXUSDT",
+    "GLMUSDT",
+    "SANDUSDT",
+    "DOGEUSDT",
+    "PUNDIXUSDT",
+    "FLOWUSDT",
+    "AXSUSDT",
+    "STXUSDT",
+    "XECUSDT",
+    "SOLUSDT",
+    "MATICUSDT",
+    "NUUSDT",
+    "AAVEUSDT",
+    "1INCHUSDT",
+    "ALGOUSDT",
+    "NEARUSDT",
+    "AVAXUSDT",
+    "TUSDT",
+    "CELOUSDT",
+    "GMTUSDT",
+    "APTUSDT",
+    "SHIBUSDT",
+    "MASKUSDT",
+    "ARBUSDT",
+  ];
   const upbitCoinList = [
     "KRW-BTC",
     "KRW-MASK",
@@ -52,6 +141,184 @@ export const Index = () => {
     "KRW-AXS",
     "KRW-TRX",
     "KRW-ATOM",
+  ];
+
+  const Tbupbit = [
+    "KRW-BTC",
+    "KRW-ETH",
+    "KRW-NEO",
+    "KRW-MTL",
+    "KRW-XRP",
+    "KRW-ETC",
+    "KRW-OMG",
+    "KRW-WAVES",
+    "KRW-XEM",
+    "KRW-QTUM",
+    "KRW-LSK",
+    "KRW-STEEM",
+    "KRW-XLM",
+    "KRW-ARDR",
+    "KRW-STORJ",
+    "KRW-REP",
+    "KRW-ADA",
+    "KRW-POWR",
+    "KRW-BTG",
+    "KRW-ICX",
+    "KRW-EOS",
+    "KRW-TRX",
+    "KRW-SC",
+    "KRW-ONT",
+    "KRW-ZIL",
+    "KRW-POLYX",
+    "KRW-ZRX",
+    "KRW-LOOM",
+    "KRW-BCH",
+    "KRW-BAT",
+    "KRW-IOST",
+    "KRW-CVC",
+    "KRW-IOTA",
+    "KRW-HIFI",
+    "KRW-ONG",
+    "KRW-GAS",
+    "KRW-ELF",
+    "KRW-KNC",
+    "KRW-THETA",
+    "KRW-QKC",
+    "KRW-BTT",
+    "KRW-ENJ",
+    "KRW-TFUEL",
+    "KRW-MANA",
+    "KRW-ANKR",
+    "KRW-ATOM",
+    "KRW-MBL",
+    "KRW-WAXP",
+    "KRW-HBAR",
+    "KRW-STPT",
+    "KRW-VET",
+    "KRW-CHZ",
+    "KRW-STMX",
+    "KRW-HIVE",
+    "KRW-KAVA",
+    "KRW-LINK",
+    "KRW-XTZ",
+    "KRW-JST",
+    "KRW-SXP",
+    "KRW-PLA",
+    "KRW-DOT",
+    "KRW-SRM",
+    "KRW-STRAX",
+    "KRW-GLM",
+    "KRW-SAND",
+    "KRW-DOGE",
+    "KRW-PUNDIX",
+    "KRW-FLOW",
+    "KRW-AXS",
+    "KRW-STX",
+    "KRW-XEC",
+    "KRW-SOL",
+    "KRW-MATIC",
+    "KRW-NU",
+    "KRW-AAVE",
+    "KRW-1INCH",
+    "KRW-ALGO",
+    "KRW-NEAR",
+    "KRW-AVAX",
+    "KRW-T",
+    "KRW-CELO",
+    "KRW-GMT",
+    "KRW-APT",
+    "KRW-SHIB",
+    "KRW-MASK",
+    "KRW-ARB",
+  ];
+
+  const TbupbitSocket = [
+    "KRW-BTC.1",
+    "KRW-ETH.1",
+    "KRW-NEO.1",
+    "KRW-MTL.1",
+    "KRW-XRP.1",
+    "KRW-ETC.1",
+    "KRW-OMG.1",
+    "KRW-WAVES.1",
+    "KRW-XEM.1",
+    "KRW-QTUM.1",
+    "KRW-LSK.1",
+    "KRW-STEEM.1",
+    "KRW-XLM.1",
+    "KRW-ARDR.1",
+    "KRW-STORJ.1",
+    "KRW-REP.1",
+    "KRW-ADA.1",
+    "KRW-POWR.1",
+    "KRW-BTG.1",
+    "KRW-ICX.1",
+    "KRW-EOS.1",
+    "KRW-TRX.1",
+    "KRW-SC.1",
+    "KRW-ONT.1",
+    "KRW-ZIL.1",
+    "KRW-POLYX.1",
+    "KRW-ZRX.1",
+    "KRW-LOOM.1",
+    "KRW-BCH.1",
+    "KRW-BAT.1",
+    "KRW-IOST.1",
+    "KRW-CVC.1",
+    "KRW-IOTA.1",
+    "KRW-HIFI.1",
+    "KRW-ONG.1",
+    "KRW-GAS.1",
+    "KRW-ELF.1",
+    "KRW-KNC.1",
+    "KRW-THETA.1",
+    "KRW-QKC.1",
+    "KRW-BTT.1",
+    "KRW-ENJ.1",
+    "KRW-TFUEL.1",
+    "KRW-MANA.1",
+    "KRW-ANKR.1",
+    "KRW-ATOM.1",
+    "KRW-MBL.1",
+    "KRW-WAXP.1",
+    "KRW-HBAR.1",
+    "KRW-STPT.1",
+    "KRW-VET.1",
+    "KRW-CHZ.1",
+    "KRW-STMX.1",
+    "KRW-HIVE.1",
+    "KRW-KAVA.1",
+    "KRW-LINK.1",
+    "KRW-XTZ.1",
+    "KRW-JST.1",
+    "KRW-SXP.1",
+    "KRW-PLA.1",
+    "KRW-DOT.1",
+    "KRW-SRM.1",
+    "KRW-STRAX.1",
+    "KRW-GLM.1",
+    "KRW-SAND.1",
+    "KRW-DOGE.1",
+    "KRW-PUNDIX.1",
+    "KRW-FLOW.1",
+    "KRW-AXS.1",
+    "KRW-STX.1",
+    "KRW-XEC.1",
+    "KRW-SOL.1",
+    "KRW-MATIC.1",
+    "KRW-NU.1",
+    "KRW-AAVE.1",
+    "KRW-1INCH.1",
+    "KRW-ALGO.1",
+    "KRW-NEAR.1",
+    "KRW-AVAX.1",
+    "KRW-T.1",
+    "KRW-CELO.1",
+    "KRW-GMT.1",
+    "KRW-APT.1",
+    "KRW-SHIB.1",
+    "KRW-MASK.1",
+    "KRW-ARB.1",
   ];
   const upbitSocketCoinList = [
     "KRW-BTC.1",
@@ -96,7 +363,7 @@ export const Index = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://api.upbit.com/v1/ticker?markets=${upbitCoinList.join(",")}`
+        `https://api.upbit.com/v1/ticker?markets=${Tbupbit.join(",")}`
       );
       setFirstUpbit(response.data);
       setTimeout(() => {
@@ -114,7 +381,7 @@ export const Index = () => {
         "https://api.binance.com/api/v3/ticker/24hr"
       );
       let binanceList = response.data.filter((a: any) => {
-        if (binanceCoinList.includes(a.symbol)) {
+        if (Tbbinance.includes(a.symbol)) {
           return a;
         }
       });
@@ -139,8 +406,8 @@ export const Index = () => {
     if (!isLoading && !isLoading1) {
       setFirstRenderList(() => {
         let newData = [];
-        for (let i = 0; i < binanceCoinList.length; i++) {
-          for (let j = 0; j < binanceCoinList.length; j++) {
+        for (let i = 0; i < Tbbinance.length; i++) {
+          for (let j = 0; j < Tbbinance.length; j++) {
             let upbitName = firstUpbit[j].market.split("").slice(4).join("");
             let binanceName = firstBinance[i].symbol
               .split("")
@@ -170,7 +437,7 @@ export const Index = () => {
       const upbitSocket = new WebSocket("wss://api.upbit.com/websocket/v1");
       upbitSocket.onopen = (e: any) => {
         upbitSocket.send(
-          `[{"ticket":"test"},{"type":"orderbook","codes":[${upbitSocketCoinList.join(
+          `[{"ticket":"test"},{"type":"orderbook","codes":[${TbupbitSocket.join(
             ","
           )}]},{"format":"SIMPLE"}]`
         );
@@ -190,7 +457,7 @@ export const Index = () => {
   }, [isLoading, isLoading1]);
 
   //! -------------------------  바이낸스  --------------------
-  const binanceSocketList = useRef([]);
+  const binanceSocketList = useRef<any>([]);
   useEffect(() => {
     const binanceSocket = new WebSocket("wss://stream.binance.com:9443/ws");
     binanceSocket.onopen = function (e) {
@@ -203,8 +470,8 @@ export const Index = () => {
     };
 
     binanceSocket.onmessage = (e) => {
-      const response = JSON.parse(e.data);
-      binanceSocketList.current = response;
+      const response: any = JSON.parse(e.data);
+      binanceSocketList.current = [...binanceSocketList.current, ...response];
     };
     return () => binanceSocket.close();
   }, []);
@@ -220,15 +487,20 @@ export const Index = () => {
           .filter((el: any, idx: any, arr: any) => {
             return arr.findIndex((item: any) => item.name === el.name) === idx;
           });
-
-        console.log(newUpbitList, upbitCoinList);
-        let newBinanceList: any = binanceSocketList.current?.filter(
-          (el: any) => {
-            if (binanceCoinList.includes(el.s)) {
+        console.log("TBBB", newUpbitList);
+        let newBinanceList: any = binanceSocketList.current
+          ?.reverse()
+          .filter((el: any, idx: any, arr: any) => {
+            return arr.findIndex((item: any) => item.s === el.s) === idx;
+          })
+          ?.filter((el: any) => {
+            if (Tbbinance.includes(el.s)) {
               return el;
             }
-          }
-        );
+          });
+
+        console.log(firstRenderList);
+        console.log("NNEWWWw===============", newBinanceList);
         let firstRender = [...firstRenderList];
         firstRender.map((el: any) => {
           for (let i = 0; i < newUpbitList.length; i++) {
@@ -251,8 +523,7 @@ export const Index = () => {
           }
           el.per = (el.upbit / (el.binance * usdt) - 1) * 100;
         });
-        firstRender.map;
-        console.log(firstRender);
+        console.log("first", firstRender);
         setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
         let filteredList = [...firstRender];
         let lastBTC = filteredList.filter((el: any) => {
