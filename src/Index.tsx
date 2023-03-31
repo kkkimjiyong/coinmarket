@@ -621,7 +621,7 @@ export const Index = () => {
           .filter((el: any) => el.per < -1.5)
           .concat(firstRenderList.filter((el: any) => el.per > -1.5))
           .map((el: any) => {
-            if (searchName.trim().length !== 0 && submit) {
+            if (searchName.trim().length !== 0) {
               if (
                 el.name
                   .toLocaleLowerCase()
