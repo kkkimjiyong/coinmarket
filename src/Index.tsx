@@ -9,6 +9,7 @@ import { TbReload } from "react-icons/tb";
 import { FaVolumeMute } from "react-icons/fa";
 import { ImVolumeMute } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
+import { useInterval } from "./custom/useInterval";
 
 export const Index = () => {
   const navigate = useNavigate();
@@ -460,67 +461,60 @@ export const Index = () => {
 
   // ~===================== 상태변화
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (!isLoading && !isLoading1 && firstRenderList.length !== 0) {
-        // 새로운 코인리스트
-        let newUpbitList: any = upbitSocketList.current
-          .reverse()
-          .filter((el: any, idx: any, arr: any) => {
-            return arr.findIndex((item: any) => item.name === el.name) === idx;
-          });
-        console.log("TBBB", newUpbitList);
-        let newBinanceList: any = binanceSocketList.current
-          ?.reverse()
-          .filter((el: any, idx: any, arr: any) => {
-            return arr.findIndex((item: any) => item.s === el.s) === idx;
-          })
-          ?.filter((el: any) => {
-            if (Tbbinance.includes(el.s)) {
-              return el;
-            }
-          });
-
-        console.log(firstRenderList);
-        console.log("NNEWWWw===============", newBinanceList);
-        let firstRender = [...firstRenderList];
-        firstRender.map((el: any) => {
-          for (let i = 0; i < newUpbitList.length; i++) {
-            let newUpbitName = newUpbitList[i].name.split("").slice(4).join("");
-            if (el.name === newUpbitName) {
-              el.upbit = newUpbitList[i].upbit;
-              el.upbit_bidSize = newUpbitList[i].upbit_bidSize;
-            }
-          }
-          for (let j = 0; j < newBinanceList.length; j++) {
-            let newBinanceName = newBinanceList[j].s
-              .split("")
-              .reverse()
-              .slice(4)
-              .reverse()
-              .join("");
-            if (el.name === newBinanceName) {
-              el.binance = newBinanceList[j].c;
-            }
-          }
-          el.per = (el.upbit / (el.binance * usdt) - 1) * 100;
+  useInterval(() => {
+    if (!isLoading && !isLoading1 && firstRenderList.length !== 0) {
+      // 새로운 코인리스트
+      let newUpbitList: any = upbitSocketList.current
+        .reverse()
+        .filter((el: any, idx: any, arr: any) => {
+          return arr.findIndex((item: any) => item.name === el.name) === idx;
         });
-        console.log("first", firstRender);
-        setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
-        let filteredList = [...firstRender];
-        let lastBTC = filteredList.filter((el: any) => {
-          return el.name === "BTC";
+      console.log("TBBB", newUpbitList);
+      let newBinanceList: any = binanceSocketList.current
+        ?.reverse()
+        .filter((el: any, idx: any, arr: any) => {
+          return arr.findIndex((item: any) => item.s === el.s) === idx;
+        })
+        ?.filter((el: any) => {
+          if (Tbbinance.includes(el.s)) {
+            return el;
+          }
         });
 
-        setUpBtc(lastBTC[0].upbit);
-        setBinanceBtc(lastBTC[0].binance);
-      }
-    }, 500);
+      let firstRender = [...firstRenderList];
+      firstRender.map((el: any) => {
+        for (let i = 0; i < newUpbitList.length; i++) {
+          let newUpbitName = newUpbitList[i].name.split("").slice(4).join("");
+          if (el.name === newUpbitName) {
+            el.upbit = newUpbitList[i].upbit;
+            el.upbit_bidSize = newUpbitList[i].upbit_bidSize;
+          }
+        }
+        for (let j = 0; j < newBinanceList.length; j++) {
+          let newBinanceName = newBinanceList[j].s
+            .split("")
+            .reverse()
+            .slice(4)
+            .reverse()
+            .join("");
+          if (el.name === newBinanceName) {
+            el.binance = newBinanceList[j].c;
+          }
+        }
+        el.per = (el.upbit / (el.binance * usdt) - 1) * 100;
+      });
+      console.log("first", firstRender);
+      setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
+      let filteredList = [...firstRender];
+      let lastBTC = filteredList.filter((el: any) => {
+        return el.name === "BTC";
+      });
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isLoading, isLoading1, firstRenderList]);
+      setUpBtc(lastBTC[0].upbit);
+      setBinanceBtc(lastBTC[0].binance);
+    }
+  }, 500);
+
   //현재시각
   let today = new Date();
 
