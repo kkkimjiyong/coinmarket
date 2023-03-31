@@ -8,8 +8,10 @@ import { Loading } from "./components/Loading";
 import { TbReload } from "react-icons/tb";
 import { FaVolumeMute } from "react-icons/fa";
 import { ImVolumeMute } from "react-icons/im";
+import { useNavigate } from "react-router-dom";
 
 export const Index = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoading1, setIsLoading1] = useState<boolean>(true);
 
@@ -308,7 +310,6 @@ export const Index = () => {
             <span>현재시각 :</span> {nowDate}{" "}
           </div>
         </StyledOptionBox>
-
         <StyledHeaderContainer>
           <StyledExchaneBox>
             BTC-KRW
@@ -325,7 +326,10 @@ export const Index = () => {
           <StyledExchaneBox>
             USDT환율 <div className="number">{usdt?.toFixed(2)}</div>
           </StyledExchaneBox>
-        </StyledHeaderContainer>
+        </StyledHeaderContainer>{" "}
+        <StyledAddCoinListTxt onClick={() => navigate("/add")}>
+          코인추가 +
+        </StyledAddCoinListTxt>
         <StyledTitle>
           <StyledTitleItem>코인이름</StyledTitleItem>
           <StyledTitleItem>
@@ -499,5 +503,19 @@ const StyledTitleItem = styled.div`
     margin-left: -5px;
     margin-right: 5px;
     width: 15%;
+  }
+`;
+
+const StyledAddCoinListTxt = styled.div`
+  font-size: 12px;
+  font-weight: 70;
+  color: gray;
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  :hover {
+    color: white;
+    cursor: pointer;
+    text-decoration: underline;
   }
 `;
