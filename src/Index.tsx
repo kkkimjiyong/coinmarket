@@ -534,6 +534,11 @@ export const Index = () => {
 
   //!====================== 소리끄기  ========================
   const [mute, setMute] = useState<boolean>(false);
+
+  //!==================  검색인풋  ====================
+  const [searchName, setSearchName] = useState<string>("");
+  const [submit, setSubmit] = useState<boolean>(false);
+
   return (
     <StyledContainer>
       {" "}
@@ -572,10 +577,7 @@ export const Index = () => {
             BTC_USDT
             <div className="number">{Number(binanceBtc)?.toFixed(2)}</div>
           </StyledExchaneBox>
-          {/* <StyledExchaneBox>
-            시세차이 per{}
-            <div className="number">{~~(upBtc - binanceBtc * usdt)}원</div>
-          </StyledExchaneBox> */}
+
           <StyledExchaneBox>
             USDT환율 <div className="number">{usdt?.toFixed(2)}</div>
           </StyledExchaneBox>
@@ -583,6 +585,20 @@ export const Index = () => {
         <StyledAddCoinListTxt onClick={() => navigate("/add")}>
           코인추가 +
         </StyledAddCoinListTxt>
+        <StyledInputBox>
+          <input
+            onChange={(e) => setSearchName(e.target.value)}
+            placeholder="코인이름을 입력하세요"
+          />{" "}
+          {/* <div
+            onClick={() => {
+              setSubmit(true);
+            }}
+            className="btn"
+          >
+            검색
+          </div> */}
+        </StyledInputBox>
         <StyledTitle>
           <StyledTitleItem>코인이름</StyledTitleItem>
           <StyledTitleItem>
@@ -605,16 +621,35 @@ export const Index = () => {
           .filter((el: any) => el.per < -1.5)
           .concat(firstRenderList.filter((el: any) => el.per > -1.5))
           .map((el: any) => {
-            return (
-              <Item
-                mute={mute}
-                el={el}
-                per={el.per}
-                key={el.name}
-                usdt={usdt}
-                setFirstRenderList={setFirstRenderList}
-              />
-            );
+            if (searchName.trim().length !== 0 && submit) {
+              if (
+                el.name
+                  .toLocaleLowerCase()
+                  .includes(searchName.toLocaleLowerCase())
+              ) {
+                return (
+                  <Item
+                    mute={mute}
+                    el={el}
+                    per={el.per}
+                    key={el.name}
+                    usdt={usdt}
+                    setFirstRenderList={setFirstRenderList}
+                  />
+                );
+              }
+            } else {
+              return (
+                <Item
+                  mute={mute}
+                  el={el}
+                  per={el.per}
+                  key={el.name}
+                  usdt={usdt}
+                  setFirstRenderList={setFirstRenderList}
+                />
+              );
+            }
           })}
       </StyledTempWrap>
     </StyledContainer>
@@ -688,6 +723,40 @@ const StyledHeaderContainer = styled.div`
   background-color: #0e162d;
   border-radius: 10px;
   display: flex;
+`;
+const StyledInputBox = styled.div`
+  display: flex;
+  width: 90%;
+  justify-content: flex-start;
+  input {
+    border: none;
+    border-radius: 0;
+    width: 30%;
+    padding: 0 10px;
+    height: 30px;
+    border-radius: 10px;
+  }
+  .btn {
+    width: 50px;
+    height: 30px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+    background-color: #303550;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+      -4px -3px 4px 0 rgba(255, 255, 255, 0.3);
+    :hover {
+      background-color: #1b1f31;
+      color: gray;
+      cursor: pointer;
+      box-shadow: 8px 8px 12px 3px rgba(0, 0, 0, 0.25) inset;
+    }
+  }
 `;
 
 const StyledExchaneBox = styled.div`
