@@ -323,8 +323,6 @@ export const Index = () => {
     "KRW-ATOM.1",
   ];
 
-  console.log(upbitCoinList.join(","));
-
   const [firstUpbit, setFirstUpbit] = useState<any>();
   const [firstBinance, setFirstBinance] = useState<any>();
   const [firstRenderList, setFirstRenderList] = useState<any>([]);
@@ -337,7 +335,6 @@ export const Index = () => {
       const response = await axios.get(
         "https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD"
       );
-      console.log("환율", response.data[0].basePrice);
       setUsdt(response.data[0].basePrice);
     } catch (error) {}
   };
@@ -469,7 +466,6 @@ export const Index = () => {
         .filter((el: any, idx: any, arr: any) => {
           return arr.findIndex((item: any) => item.name === el.name) === idx;
         });
-      console.log("TBBB", newUpbitList);
       let newBinanceList: any = binanceSocketList.current
         ?.reverse()
         .filter((el: any, idx: any, arr: any) => {
@@ -503,7 +499,7 @@ export const Index = () => {
         }
         el.per = (el.upbit / (el.binance * usdt) - 1) * 100;
       });
-      console.log("first", firstRender);
+
       setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
       let filteredList = [...firstRender];
       let lastBTC = filteredList.filter((el: any) => {
@@ -532,6 +528,10 @@ export const Index = () => {
   //!==================  검색인풋  ====================
   const [searchName, setSearchName] = useState<string>("");
   const [submit, setSubmit] = useState<boolean>(false);
+
+  //! ================= 즐겨찾기 기능  ====================
+
+  const [favorite, setFavorite] = useState<boolean>(false);
 
   return (
     <StyledContainer>
@@ -592,16 +592,29 @@ export const Index = () => {
             검색
           </div> */}
         </StyledInputBox>
+        <StyledFavoriteTxt>
+          <div
+            className="text"
+            onClick={() => {
+              setFavorite(!favorite);
+            }}
+          >
+            즐겨찾기 {favorite ? "취소" : "보기"}
+          </div>
+        </StyledFavoriteTxt>
         <StyledTitle>
           <StyledTitleItem>코인이름</StyledTitleItem>
-          <StyledTitleItem>
-            <img className="binance" src={binance} alt="바이낸스" />
-            <span>바이낸스</span>
-          </StyledTitleItem>
-          <StyledTitleItem>
-            <img className="upbit" src={upbit} alt="바이낸스" />
-            <span>업비트</span>
-          </StyledTitleItem>
+          <StyledMediaFlex>
+            <StyledTitleItem>
+              <img className="binance" src={binance} alt="바이낸스" />
+              <span>바이낸스</span>
+            </StyledTitleItem>
+            <StyledTitleItem>
+              <img className="upbit" src={upbit} alt="바이낸스" />
+              <span>업비트</span>
+            </StyledTitleItem>
+          </StyledMediaFlex>
+
           <StyledTitleItem>매수가총액</StyledTitleItem>
           <StyledTitleItem>보따리각</StyledTitleItem>
         </StyledTitle>
@@ -613,6 +626,19 @@ export const Index = () => {
           })
           .filter((el: any) => el.per < -1.5)
           .concat(firstRenderList.filter((el: any) => el.per > -1.5))
+          .filter((el: any) => {
+            if (favorite) {
+              if (
+                JSON.parse(localStorage.getItem("favorites") || "[]").includes(
+                  el.name
+                )
+              ) {
+                return el;
+              }
+            } else {
+              return el;
+            }
+          })
           .map((el: any) => {
             if (searchName.trim().length !== 0) {
               if (
@@ -708,6 +734,15 @@ const StyledOptionBox = styled.div`
   }
 `;
 
+const StyledMediaFlex = styled.div`
+  display: flex;
+  flex: 2;
+  @media screen and (max-width: 480px) {
+    flex-direction: column-reverse;
+    flex: 1;
+  }
+`;
+
 const StyledHeaderContainer = styled.div`
   flex: none;
   margin: 20px auto;
@@ -783,6 +818,26 @@ const StyledExchaneBox = styled.div`
   }
 `;
 
+const StyledFavoriteTxt = styled.div`
+  font-size: 12px;
+  font-weight: 70;
+  color: #a2a7c9;
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  margin-bottom: -40px;
+
+  .text {
+    color: #a2a7c9;
+    :hover {
+      color: white;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+`;
+
 const StyledTitle = styled.div`
   margin: 50px auto 0px auto;
   padding: 0px 20px;
@@ -806,9 +861,10 @@ const StyledTitleItem = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 480px) {
     font-size: 12px;
     font-weight: 700;
+    padding: 5px;
   }
 
   .upbit {
