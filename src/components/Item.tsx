@@ -52,7 +52,12 @@ export const Item = ({
     >
       <StyledItemBox larger={larger} className="coinName">
         <StyledImgBack>
-          {/* <img className="img" src={`../${el?.name}.png`} alt="MASK" /> */}
+          <img
+            className="img"
+            src={`../${el?.name}.png`}
+            onError={(e: any) => (e.target.style.display = "none")}
+            alt="MASK"
+          />
         </StyledImgBack>{" "}
         {el?.name}
       </StyledItemBox>
