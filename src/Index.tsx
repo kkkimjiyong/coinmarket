@@ -10,6 +10,7 @@ import { FaVolumeMute } from "react-icons/fa";
 import { ImVolumeMute } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import { useInterval } from "./custom/useInterval";
+import { supabase } from "./lib/supabase";
 
 export const Index = () => {
   const navigate = useNavigate();
@@ -317,6 +318,48 @@ export const Index = () => {
     "KRW-ATOM.1",
   ];
 
+  const [userCoinList, setUserCoinList] = useState<any>([]);
+  const [userDone, setUserDone] = useState<boolean>(false);
+  const getUserCoinList = async () => {
+    try {
+      const { data }: any = await supabase
+        .from("user")
+        .select("coinList")
+        .eq("id", localStorage.getItem("id"));
+      setUserDone(true);
+      let newData = data[0].coinList.filter((el: any) => el.checked);
+      setUserCoinList(newData);
+      makeUpbit(newData);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getUserCoinList();
+  }, []);
+
+  const makeUsdt = (list: any) => {
+    let data = [];
+    for (let i = 0; i < list.length; i++) {
+      data.push(`${list[i].name}USDT`);
+    }
+    return data;
+  };
+
+  const makeUpbit = (list: any) => {
+    let data = [];
+    for (let i = 0; i < list.length; i++) {
+      data.push(`KRW-${list[i].name}`);
+    }
+    return data;
+  };
+  const makeUpbitSocket = (list: any) => {
+    let data = [];
+    for (let i = 0; i < list.length; i++) {
+      data.push(`KRW-${list[i].name}.1`);
+    }
+    return data;
+  };
+
   const [firstUpbit, setFirstUpbit] = useState<any>();
   const [firstBinance, setFirstBinance] = useState<any>();
   const [firstRenderList, setFirstRenderList] = useState<any>([]);
@@ -337,7 +380,9 @@ export const Index = () => {
     setIsLoading(true);
     try {
       const response = await axios.get(
-        `https://api.upbit.com/v1/ticker?markets=${Tbupbit.join(",")}`
+        `https://api.upbit.com/v1/ticker?markets=${makeUpbit(userCoinList).join(
+          ","
+        )}`
       );
       setFirstUpbit(response.data);
       setTimeout(() => {
@@ -354,15 +399,13 @@ export const Index = () => {
       const response: any = await axios.get(
         "https://api.binance.com/api/v3/ticker/24hr"
       );
+      let filteredList = makeUsdt(userCoinList);
       let binanceList = response.data.filter((a: any) => {
-        if (Tbbinance.includes(a.symbol)) {
+        if (filteredList.includes(a.symbol)) {
           return a;
         }
       });
-      let USDTBTC = binanceList.filter((el: any) => {
-        return el.symbol === "BTCUSDT";
-      })[0];
-      setBinanceBtc(USDTBTC.lastPrice);
+
       setFirstBinance(binanceList);
       setTimeout(() => {
         setIsLoading1(false);
@@ -371,17 +414,22 @@ export const Index = () => {
   };
 
   useEffect(() => {
-    getUsdExchange();
-    getUpbitAllList();
-    getBinanceAllList();
-  }, []);
+    if (userDone) {
+      getUsdExchange();
+      getUpbitAllList();
+      getBinanceAllList();
+    }
+  }, [userDone]);
 
   useEffect(() => {
-    if (!isLoading && !isLoading1) {
+    console.log(isLoading);
+    console.log(isLoading1);
+    console.log(firstBinance);
+    if (!isLoading && !isLoading1 && userDone) {
       setFirstRenderList(() => {
         let newData = [];
-        for (let i = 0; i < Tbbinance.length; i++) {
-          for (let j = 0; j < Tbbinance.length; j++) {
+        for (let i = 0; i < userCoinList.length; i++) {
+          for (let j = 0; j < userCoinList.length; j++) {
             let upbitName = firstUpbit[j].market.split("").slice(4).join("");
             let binanceName = firstBinance[i].symbol
               .split("")
@@ -401,7 +449,7 @@ export const Index = () => {
         return newData;
       });
     }
-  }, [isLoading, isLoading1]);
+  }, [isLoading, isLoading1, userDone]);
 
   //! =============================  업비트소켓   ==================================
   const upbitSocketList = useRef<any>([]);
@@ -411,9 +459,9 @@ export const Index = () => {
       const upbitSocket = new WebSocket("wss://api.upbit.com/websocket/v1");
       upbitSocket.onopen = (e: any) => {
         upbitSocket.send(
-          `[{"ticket":"test"},{"type":"orderbook","codes":[${TbupbitSocket.join(
-            ","
-          )}]},{"format":"SIMPLE"}]`
+          `[{"ticket":"test"},{"type":"orderbook","codes":[${makeUpbitSocket(
+            userCoinList
+          ).join(",")}]},{"format":"SIMPLE"}]`
         );
       };
       upbitSocket.onmessage = (e: any) => {
@@ -455,6 +503,7 @@ export const Index = () => {
   useInterval(() => {
     if (!isLoading && !isLoading1 && firstRenderList.length !== 0) {
       console.log("1");
+      let binanceFilterList = makeUsdt(userCoinList);
       // 새로운 코인리스트
       let newUpbitList: any = upbitSocketList.current
         .reverse()
@@ -467,7 +516,7 @@ export const Index = () => {
           return arr.findIndex((item: any) => item.s === el.s) === idx;
         })
         ?.filter((el: any) => {
-          if (Tbbinance.includes(el.s)) {
+          if (binanceFilterList.includes(el.s)) {
             return el;
           }
         });
@@ -571,7 +620,7 @@ export const Index = () => {
           </StyledExchaneBox>
         </StyledHeaderContainer>{" "}
         <StyledAddCoinListTxt onClick={() => navigate("/add")}>
-          코인추가 +
+          코인수정 +-
         </StyledAddCoinListTxt>
         <StyledInputBox>
           <input

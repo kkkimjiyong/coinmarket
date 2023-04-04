@@ -21,7 +21,7 @@ export const Login = () => {
         localStorage.setItem("id", id);
         navigate("/main");
       } else {
-        alert("없는 회원이거나 등록되지 않은 회원입니다");
+        alert("없는 회원이거나 허가되지 않은 회원입니다");
       }
     } catch (error) {
       console.log(error);

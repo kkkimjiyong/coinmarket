@@ -8,10 +8,14 @@ import { Loading } from "./components/Loading";
 import { TbReload } from "react-icons/tb";
 import { FaVolumeMute } from "react-icons/fa";
 import { ImVolumeMute } from "react-icons/im";
+import { supabase } from "./lib/supabase";
+import { defaultCoinList } from "./assets/defaultCoinList";
+import { useNavigate } from "react-router-dom";
 
 export const Add = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isLoading1, setIsLoading1] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   const binanceCoinList = [
     "MASKUSDT",
@@ -716,54 +720,33 @@ export const Add = () => {
 
   const [binanceBtc, setBinanceBtc] = useState<any>();
 
-  const getBinanceAllList = async () => {
-    setIsLoading1(true);
-    try {
-      console.log("실행");
-      const response: any = await axios.get(
-        "https://api.binance.com/api/v3/ticker/24hr"
-      );
-      let a = response.data.filter((el: any) => {
-        return el.symbol.split("").reverse().join("").substr(0, 4) === "TDSU";
-      });
-      setFirstBinance(a);
+  // const getBinanceAllList = async () => {
+  //   setIsLoading1(true);
+  //   try {
+  //     console.log("실행");
+  //     const response: any = await axios.get(
+  //       "https://api.binance.com/api/v3/ticker/24hr"
+  //     );
+  //     let a = response.data.filter((el: any) => {
+  //       return el.symbol.split("").reverse().join("").substr(0, 4) === "TDSU";
+  //     });
+  //     setFirstBinance(a);
 
-      setTimeout(() => {
-        setIsLoading1(false);
-      }, 1200);
-    } catch (error) {}
-  };
-  console.log(firstBinance);
-  useEffect(() => {
-    getUsdExchange();
-    getBinanceAllList();
-  }, []);
+  //     setTimeout(() => {
+  //       setIsLoading1(false);
+  //     }, 1200);
+  //   } catch (error) {}
+  // };
+  // console.log(firstBinance);
+  // useEffect(() => {
+  //   getUsdExchange();
+  //   getBinanceAllList();
+  // }, []);
+
   //바이낸스와 업비트 중복되는 코인
   const [sameList, setSameList] = useState<any>();
   useEffect(() => {
     if (!isLoading1) {
-      // setFirstRenderList(() => {
-      //   let newData = [];
-      //   for (let i = 0; i < binanceCoinList.length; i++) {
-      //     for (let j = 0; j < binanceCoinList.length; j++) {
-      //       let upbitName = firstUpbit[j].market.split("").slice(4).join("");
-      //       let binanceName = firstBinance[i].symbol
-      //         .split("")
-      //         .reverse()
-      //         .slice(4)
-      //         .reverse()
-      //         .join("");
-      //       if (upbitName === binanceName) {
-      //         newData.push({
-      //           name: upbitName,
-      //           upbit: firstUpbit[j].trade_price,
-      //           binance: firstBinance[i].lastPrice,
-      //         });
-      //       }
-      //     }
-      //   }
-      //   return newData;
-      // });
       let LastData = [];
       for (let i = 0; i < z.length; i++) {
         for (let j = 0; j < firstBinance.length; j++) {
@@ -775,7 +758,7 @@ export const Add = () => {
             .reverse()
             .join("");
           if (upbitName === binanceName) {
-            LastData.push(upbitName);
+            LastData.push({ name: upbitName, checked: true });
           }
         }
       }
@@ -793,15 +776,105 @@ export const Add = () => {
     }
   }, [isLoading, isLoading1]);
 
+  const onSaveHandler = async () => {
+    let data = sameList.filter((el: any) => el.checked === true);
+    console.log("보내는 값", data.length);
+    try {
+      const { data }: any = await supabase
+        .from("user")
+        .update({
+          coinList: sameList,
+        })
+        .eq("id", localStorage.getItem("id"))
+        .select("coinList");
+      setSameList(data[0].coinList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserCoinList = async () => {
+    try {
+      const { data }: any = await supabase
+        .from("user")
+        .select("coinList")
+        .eq("id", localStorage.getItem("id"));
+      console.log(
+        "===========================================",
+        data[0].coinList
+      );
+      setSameList(data[0].coinList);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1200);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getUserCoinList();
+  }, []);
+
   return (
     <StyledContainer>
+      {isLoading && <Loading />}
       {/* {isLoading && isLoading1 && <Loading />} */}
-      <div>총 개수 {sameList?.length}</div>
-      {sameList?.map((el: any) => (
-        <StyledCoinItem>{el}</StyledCoinItem>
-      ))}
-      <div>코인 리스트</div>
-      <div>각 코인들</div>
+      <StyledStickyHeader>
+        <StyledNavigateBtn onClick={() => navigate("/main")}>
+          메인으로
+        </StyledNavigateBtn>
+        <StyledSaveBtn onClick={onSaveHandler}>저장</StyledSaveBtn>
+      </StyledStickyHeader>
+
+      <StyledListContainer>
+        <div>
+          현재 리스트 {sameList?.filter((el: any) => el.checked).length}개
+        </div>
+        {sameList?.map((el: any) => {
+          if (el.checked)
+            return (
+              <StyledCoinItem
+                onClick={() => {
+                  setSameList((prev: any) => {
+                    return prev.map((item: any) => {
+                      if (el === item) {
+                        return { ...el, checked: false };
+                      } else {
+                        return item;
+                      }
+                    });
+                  });
+                }}
+              >
+                {el.name}
+              </StyledCoinItem>
+            );
+        })}
+      </StyledListContainer>
+      <StyledListContainer>
+        <div>
+          제외된 코인 {sameList?.filter((el: any) => !el.checked).length}개
+        </div>
+        {sameList?.map((el: any) => {
+          if (!el.checked)
+            return (
+              <StyledCoinItem
+                onClick={() => {
+                  setSameList((prev: any) => {
+                    return prev.map((item: any) => {
+                      if (el === item) {
+                        return { ...el, checked: true };
+                      } else {
+                        return item;
+                      }
+                    });
+                  });
+                }}
+              >
+                {el.name}
+              </StyledCoinItem>
+            );
+        })}
+      </StyledListContainer>
     </StyledContainer>
   );
 };
@@ -815,19 +888,75 @@ const StyledContainer = styled.div`
   overflow-y: scroll;
   background-color: #303550;
   display: flex;
+  justify-content: center;
+`;
+
+const StyledStickyHeader = styled.div`
+  position: fixed;
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #2c3049;
+`;
+
+const StyledNavigateBtn = styled.div`
+  width: 30%;
+  height: 50%;
+  border-radius: 10px;
+  background-color: #474c66;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+    -4px -3px 4px 0 rgba(255, 255, 255, 0.3);
+  :hover {
+    background-color: #1b1f31;
+    color: gray;
+    cursor: pointer;
+    box-shadow: 8px 8px 12px 3px rgba(0, 0, 0, 0.25) inset;
+  }
+`;
+
+const StyledSaveBtn = styled.div`
+  width: 60%;
+  height: 50%;
+  border-radius: 10px;
+  background-color: #474c66;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
+    -4px -3px 4px 0 rgba(255, 255, 255, 0.3);
+  :hover {
+    background-color: #1b1f31;
+    color: gray;
+    cursor: pointer;
+    box-shadow: 8px 8px 12px 3px rgba(0, 0, 0, 0.25) inset;
+  }
+`;
+
+const StyledListContainer = styled.div`
+  margin-top: 100px;
+  width: 50%;
+  height: 100%;
+  display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const StyledCoinItem = styled.div`
   flex: none;
-  width: 300px;
+  width: 60%;
+  min-width: 70px;
+  max-width: 300px;
   height: 30px;
   margin-top: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #303550;
+  background-color: #222536;
   color: white;
   border-radius: 5px;
   font-size: 12px;
