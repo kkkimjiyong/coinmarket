@@ -18,6 +18,7 @@ export const Login = () => {
         .eq("pw", pw);
       console.log(data);
       if (data?.length === 1 && data[0].admin) {
+        localStorage.setItem("id", id);
         navigate("/main");
       } else {
         alert("없는 회원이거나 등록되지 않은 회원입니다");
