@@ -44,7 +44,6 @@ export const Index = () => {
     "XRPUSDT",
     "ETCUSDT",
     "OMGUSDT",
-    "WAVESUSDT",
     "XEMUSDT",
     "QTUMUSDT",
     "LSKUSDT",
@@ -87,7 +86,6 @@ export const Index = () => {
     "CHZUSDT",
     "STMXUSDT",
     "HIVEUSDT",
-    "KAVAUSDT",
     "LINKUSDT",
     "XTZUSDT",
     "JSTUSDT",
@@ -146,7 +144,6 @@ export const Index = () => {
     "KRW-XRP",
     "KRW-ETC",
     "KRW-OMG",
-    "KRW-WAVES",
     "KRW-XEM",
     "KRW-QTUM",
     "KRW-LSK",
@@ -189,7 +186,6 @@ export const Index = () => {
     "KRW-CHZ",
     "KRW-STMX",
     "KRW-HIVE",
-    "KRW-KAVA",
     "KRW-LINK",
     "KRW-XTZ",
     "KRW-JST",
@@ -229,7 +225,6 @@ export const Index = () => {
     "KRW-XRP.1",
     "KRW-ETC.1",
     "KRW-OMG.1",
-    "KRW-WAVES.1",
     "KRW-XEM.1",
     "KRW-QTUM.1",
     "KRW-LSK.1",
@@ -272,7 +267,6 @@ export const Index = () => {
     "KRW-CHZ.1",
     "KRW-STMX.1",
     "KRW-HIVE.1",
-    "KRW-KAVA.1",
     "KRW-LINK.1",
     "KRW-XTZ.1",
     "KRW-JST.1",
@@ -460,6 +454,7 @@ export const Index = () => {
 
   useInterval(() => {
     if (!isLoading && !isLoading1 && firstRenderList.length !== 0) {
+      console.log("1");
       // 새로운 코인리스트
       let newUpbitList: any = upbitSocketList.current
         .reverse()
@@ -509,7 +504,7 @@ export const Index = () => {
       setUpBtc(lastBTC[0].upbit);
       setBinanceBtc(lastBTC[0].binance);
     }
-  }, 500);
+  }, 1000);
 
   //현재시각
   let today = new Date();
