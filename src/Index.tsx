@@ -571,7 +571,6 @@ export const Index = () => {
             BTC_USDT
             <div className="number">{Number(binanceBtc)?.toFixed(2)}</div>
           </StyledExchaneBox>
-
           <StyledExchaneBox>
             USDT환율 <div className="number">{usdt?.toFixed(2)}</div>
           </StyledExchaneBox>
@@ -597,11 +596,11 @@ export const Index = () => {
           <StyledTitleItem>코인이름</StyledTitleItem>
           <StyledTitleItem>
             <img className="binance" src={binance} alt="바이낸스" />
-            바이낸스
+            <span>바이낸스</span>
           </StyledTitleItem>
           <StyledTitleItem>
             <img className="upbit" src={upbit} alt="바이낸스" />
-            업비트
+            <span>업비트</span>
           </StyledTitleItem>
           <StyledTitleItem>매수가총액</StyledTitleItem>
           <StyledTitleItem>보따리각</StyledTitleItem>
@@ -717,6 +716,7 @@ const StyledHeaderContainer = styled.div`
   background-color: #0e162d;
   border-radius: 10px;
   display: flex;
+  justify-content: space-between;
 `;
 const StyledInputBox = styled.div`
   display: flex;
@@ -810,6 +810,7 @@ const StyledTitleItem = styled.div`
     font-size: 12px;
     font-weight: 700;
   }
+
   .upbit {
     margin-left: -5px;
     margin-right: 5px;

@@ -59,7 +59,7 @@ export const Item = ({
             alt="MASK"
           />
         </StyledImgBack>{" "}
-        {el?.name}
+        <span>{el?.name}</span>
       </StyledItemBox>
       <StyledItemBox className="binance" larger={larger}>
         {(~~(el.binance * usdt))
@@ -138,6 +138,11 @@ const StyledImgBack = styled.div`
   background-color: white;
   margin-left: -10px;
   margin-right: 10px;
+
+  @media screen and (max-width: 340px) {
+    display: none;
+  }
+
   .img {
     width: 20px;
   }
