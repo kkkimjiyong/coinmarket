@@ -24,7 +24,7 @@ export const Add = () => {
       const { data }: any = await supabase
         .from("user")
         .update({
-          coinList: defaultCoinList,
+          coinList: sameList,
         })
         .eq("id", localStorage.getItem("id"))
         .select("coinList");

@@ -12,13 +12,7 @@ export const SignUp = () => {
   const [errorIdTxt, setErrorIdTxt] = useState<string>("");
   const [errorPwTxt, setErrorPwTxt] = useState<string>("");
   const [submitChk, setSubmitChk] = useState<boolean>(false);
-  let coinList: any = [];
-  for (let i = 0; i < defaultCoinList.length; i++) {
-    coinList.push({
-      name: defaultCoinList[i],
-      checked: true,
-    });
-  }
+
   useEffect(() => {
     setErrorIdTxt("");
     if (id.trim().length < 4 || id.trim().length > 6) {
@@ -38,6 +32,13 @@ export const SignUp = () => {
   //! ======== supabase 함수 ================
 
   const postSignUp = async () => {
+    let coinList: any = [];
+    for (let i = 0; i < defaultCoinList.length; i++) {
+      coinList.push({
+        name: defaultCoinList[i],
+        checked: true,
+      });
+    }
     try {
       const { data, error }: any = await supabase
         .from("user")
