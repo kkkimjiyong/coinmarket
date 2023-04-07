@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Army from "../../public/Army.png";
 import { supabase } from "../lib/supabase";
+import { defaultCoinList } from "../assets/defaultCoinList";
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -11,7 +12,13 @@ export const SignUp = () => {
   const [errorIdTxt, setErrorIdTxt] = useState<string>("");
   const [errorPwTxt, setErrorPwTxt] = useState<string>("");
   const [submitChk, setSubmitChk] = useState<boolean>(false);
-
+  let coinList: any = [];
+  for (let i = 0; i < defaultCoinList.length; i++) {
+    coinList.push({
+      name: defaultCoinList[i],
+      checked: true,
+    });
+  }
   useEffect(() => {
     setErrorIdTxt("");
     if (id.trim().length < 4 || id.trim().length > 6) {
@@ -44,6 +51,7 @@ export const SignUp = () => {
           await supabase.from("user").insert({
             id,
             pw,
+            coinList,
           });
           alert("회원가입 성공");
           navigate("/");

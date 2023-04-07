@@ -327,7 +327,9 @@ export const Index = () => {
         .select("coinList")
         .eq("id", localStorage.getItem("id"));
       setUserDone(true);
+      console.log(data[0].coinList);
       let newData = data[0].coinList.filter((el: any) => el.checked);
+      console.log(newData);
       setUserCoinList(newData);
       makeUpbit(newData);
     } catch (error) {}
@@ -415,6 +417,7 @@ export const Index = () => {
 
   useEffect(() => {
     if (userDone) {
+      console.log(userCoinList);
       getUsdExchange();
       getUpbitAllList();
       getBinanceAllList();
