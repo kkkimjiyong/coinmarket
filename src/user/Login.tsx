@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Army from "../../public/Army.png";
 import { supabase } from "../lib/supabase";
 
 export const Login = () => {
@@ -30,10 +29,10 @@ export const Login = () => {
 
   return (
     <Container>
-      <Background />
-      <WhiteBackground />
-      <img className="img" src={Army} alt="메인이미지" />
-      {/* <Title>CoinMarket</Title> */}
+      {/* <Background /> */}
+      {/* <WhiteBackground /> */}
+      {/* <img className="img" src={Army} alt="메인이미지" /> */}
+      <Title>BundleMan</Title>
       <Input
         onChange={(e) => setId(e.target.value)}
         placeholder="아이디를 입력해주세요"
@@ -52,7 +51,7 @@ export const Login = () => {
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #303550;
+  background-color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,8 +66,12 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 20px;
+  font-family: "Lobster", cursive;
+  letter-spacing: 2px;
+  color: #00ffff;
+  font-size: 40px;
   font-weight: 700;
+  margin-bottom: 100px;
 `;
 
 const WhiteBackground = styled.div`
@@ -117,15 +120,12 @@ const LoginBtn = styled.button`
   height: 40px;
   border-radius: 15px;
   border: none;
-  background-color: #303550;
-  color: white;
+  background-color: #00ffff;
   font-size: 16px;
   font-weight: 700;
-  box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
-    -4px -3px 4px 0 rgba(255, 255, 255, 0.3);
   :hover {
     background-color: #1b1f31;
-    color: gray;
+    color: #474646;
     cursor: pointer;
     box-shadow: 8px 8px 12px 3px rgba(0, 0, 0, 0.25) inset;
   }
@@ -136,7 +136,7 @@ const SignUpTxt = styled.div`
   margin-top: 20px;
   text-decoration: underline;
   font-size: 14px;
-  color: #9ea0c5;
+  color: gray;
   :hover {
     cursor: pointer;
     color: white;

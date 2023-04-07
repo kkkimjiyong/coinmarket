@@ -29,8 +29,12 @@ footer, header, hgroup, menu, nav, section {
   display: block;
 }
 body {
+  font-family: 'Noto Sans', sans-serif;
   line-height: 1;
   font-weight: 300;
+}
+button {
+  font-family: 'Noto Sans', sans-serif;
 }
 ol, ul {
   list-style: none;

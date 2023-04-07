@@ -49,7 +49,6 @@ export const defaultCoinList: string[] = [
   "CHZ",
   "STMX",
   "HIVE",
-  "KAVA",
   "LINK",
   "XTZ",
   "JST",

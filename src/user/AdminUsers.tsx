@@ -64,30 +64,34 @@ export const AdminUsers = () => {
     <Container>
       {isLoading && <Loading />}
       <Background />
-      <Header>클릭 시, 회원등록이 됩니다.</Header>
-      {users?.map((el: any) => {
-        if (!el.admin) {
-          return (
-            <UserBox onClick={() => acceptUser(el)}>
-              <UserItem>{el.id}</UserItem>
-              <UserItem>{el.pw}</UserItem>
-              <MdAdminPanelSettings className="icon" size={20} />
-            </UserBox>
-          );
-        }
-      })}
-      <Header className="bottom">클릭 시, 회원이 삭제됩니다.</Header>
-      {users?.map((el: any) => {
-        if (el.admin) {
-          return (
-            <UserBox onClick={() => deleteUser(el)}>
-              <UserItem>{el.id}</UserItem>
-              <UserItem>{el.pw}</UserItem>
-              <IoMdClose size={20} />
-            </UserBox>
-          );
-        }
-      })}
+      <ListContainer>
+        <Header>회원등록</Header>
+        {users?.map((el: any) => {
+          if (!el.admin) {
+            return (
+              <UserBox onClick={() => acceptUser(el)}>
+                <UserItem>{el.id}</UserItem>
+                <UserItem>{el.pw}</UserItem>
+                <MdAdminPanelSettings className="icon" size={20} />
+              </UserBox>
+            );
+          }
+        })}
+      </ListContainer>
+      <ListContainer>
+        <Header className="bottom">회원삭제</Header>
+        {users?.map((el: any) => {
+          if (el.admin) {
+            return (
+              <UserBox onClick={() => deleteUser(el)}>
+                <UserItem>{el.id}</UserItem>
+                <UserItem>{el.pw}</UserItem>
+                <IoMdClose size={20} />
+              </UserBox>
+            );
+          }
+        })}
+      </ListContainer>
     </Container>
   );
 };
@@ -95,10 +99,10 @@ export const AdminUsers = () => {
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #303550;
+  background-color: #101116;
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  justify-content: center;
+  /* flex-direction: column; */
   .img {
     z-index: 3;
     margin-top: -210px;
@@ -106,6 +110,12 @@ const Container = styled.div`
     width: 100%;
     max-width: 400px;
   }
+`;
+
+const ListContainer = styled.div`
+  z-index: 10;
+  width: 40%;
+  max-width: 400px;
 `;
 
 const WhiteBackground = styled.div`
@@ -140,7 +150,7 @@ const Background = styled.div`
 const Header = styled.div`
   z-index: 4;
   margin-top: 80px;
-  width: 80%;
+  width: 100%;
   max-width: 300px;
   height: 40px;
   border-radius: 10px;
@@ -148,19 +158,18 @@ const Header = styled.div`
   align-items: center;
   justify-content: center;
   padding: 0 20px;
-  background-color: #303550;
+  background-color: #15171c;
+  color: #00ffff;
   font-size: 14px;
   font-weight: 700;
   box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
     -2px -3px 4px 0 rgba(255, 255, 255, 0.3);
-
-  color: gray;
 `;
 
 const UserBox = styled.div`
   z-index: 4;
   margin-top: 15px;
-  width: 80%;
+  width: 100%;
   max-width: 300px;
   height: 40px;
   border-radius: 10px;
@@ -168,7 +177,7 @@ const UserBox = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  background-color: #303550;
+  background-color: #1e2029;
   font-size: 14px;
   font-weight: 700;
   box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Army from "../../public/Army.png";
 import { supabase } from "../lib/supabase";
 
 export const AdminLogin = () => {
@@ -28,10 +27,10 @@ export const AdminLogin = () => {
 
   return (
     <Container>
-      <Background />
+      {/* <Background />
       <WhiteBackground />
-      <img className="img" src={Army} alt="메인이미지" />
-      <Title>관리자페이지</Title>
+      <img className="img" src={Army} alt="메인이미지" /> */}
+      <Title>Admin</Title>
       <Input
         onChange={(e) => setId(e.target.value)}
         placeholder="아이디를 입력해주세요"
@@ -48,14 +47,14 @@ export const AdminLogin = () => {
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #303550;
+  background-color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   .img {
     z-index: 3;
-    margin-top: -210px;
+    margin-top: -200px;
     margin-bottom: -30px;
     width: 100%;
     max-width: 400px;
@@ -63,9 +62,12 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  margin-top: 10px;
-  font-size: 20px;
+  font-family: "Lobster", cursive;
+  letter-spacing: 2px;
+  color: #00ffff;
+  font-size: 40px;
   font-weight: 700;
+  margin-bottom: 100px;
 `;
 
 const WhiteBackground = styled.div`
@@ -114,15 +116,12 @@ const LoginBtn = styled.button`
   height: 40px;
   border-radius: 15px;
   border: none;
-  background-color: #303550;
-  color: white;
+  background-color: #00ffff;
   font-size: 16px;
   font-weight: 700;
-  box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
-    -4px -3px 4px 0 rgba(255, 255, 255, 0.3);
   :hover {
     background-color: #1b1f31;
-    color: gray;
+    color: #474646;
     cursor: pointer;
     box-shadow: 8px 8px 12px 3px rgba(0, 0, 0, 0.25) inset;
   }
@@ -133,7 +132,7 @@ const SignUpTxt = styled.div`
   margin-top: 20px;
   text-decoration: underline;
   font-size: 14px;
-  color: #9ea0c5;
+  color: gray;
   :hover {
     cursor: pointer;
     color: white;

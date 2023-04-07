@@ -106,7 +106,7 @@ export const Item = ({
         <StyledImgBack>
           <img
             className="img"
-            src={`../${el?.name}.png`}
+            src={`../coin/${el?.name}.png`}
             onError={(e: any) => (e.target.style.display = "none")}
             alt="MASK"
           />
@@ -213,7 +213,7 @@ const StyledImgBack = styled.div`
   justify-content: center;
   background-color: white;
   margin-left: -10px;
-  margin-right: 10px;
+  margin-right: 3px;
 
   .img {
     width: 20px;

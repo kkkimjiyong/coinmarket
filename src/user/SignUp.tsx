@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Army from "../../public/Army.png";
 import { supabase } from "../lib/supabase";
 import { defaultCoinList } from "../assets/defaultCoinList";
 
@@ -75,14 +74,9 @@ export const SignUp = () => {
 
   return (
     <Container>
-      <Background />
-      <WhiteBackground />
-      <img
-        className="img"
-        src={Army}
-        alt="메인이미지"
-        onClick={() => navigate("/")}
-      />
+      {/* <Background />
+      <WhiteBackground /> */}
+      <Title onClick={() => navigate("/")}>Hello!</Title>
       <SignUpTxt onClick={() => navigate("/")} className="imgTxt">
         클릭 시, 로그인페이지로 돌아갑니다
       </SignUpTxt>
@@ -103,11 +97,10 @@ export const SignUp = () => {
     </Container>
   );
 };
-
 const Container = styled.div`
   width: 100%;
   height: 100vh;
-  background-color: #303550;
+  background-color: #000000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -122,8 +115,12 @@ const Container = styled.div`
 `;
 
 const Title = styled.div`
-  font-size: 20px;
+  font-family: "Lobster", cursive;
+  letter-spacing: 2px;
+  color: #00ffff;
+  font-size: 40px;
   font-weight: 700;
+  margin-bottom: 50px;
 `;
 
 const WhiteBackground = styled.div`
@@ -165,46 +162,42 @@ const Input = styled.input`
   z-index: 3;
 `;
 
-const ErrorTxt = styled.div`
-  margin-top: 5px;
-  color: red;
-  font-size: 12px;
-`;
-
 const LoginBtn = styled.button`
   z-index: 3;
   width: 250px;
-  margin-top: 40px;
+  margin-top: 50px;
   height: 40px;
   border-radius: 15px;
   border: none;
-  background-color: #303550;
-  color: white;
+  background-color: #00ffff;
   font-size: 16px;
   font-weight: 700;
-  box-shadow: 12px 12px 16px 0 rgba(0, 0, 0, 0.25),
-    -4px -3px 4px 0 rgba(255, 255, 255, 0.3);
   :hover {
     background-color: #1b1f31;
-    color: gray;
+    color: #474646;
     cursor: pointer;
     box-shadow: 8px 8px 12px 3px rgba(0, 0, 0, 0.25) inset;
   }
 `;
 
 const SignUpTxt = styled.div`
+  &.imgTxt {
+    margin-top: 0px;
+    text-decoration: none;
+  }
   z-index: 3;
   margin-top: 20px;
   text-decoration: underline;
-  font-size: 12px;
-  color: #9ea0c5;
-  &.imgTxt {
-    text-decoration: none;
-    margin-top: 0;
-    color: #9ea0c595;
-    :hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
+  font-size: 14px;
+  color: gray;
+  :hover {
+    cursor: pointer;
+    color: white;
   }
+`;
+
+const ErrorTxt = styled.div`
+  margin-top: 5px;
+  color: red;
+  font-size: 12px;
 `;

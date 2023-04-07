@@ -246,6 +246,7 @@ const StyledListContainer = styled.div`
 const StyledInput = styled.input`
   width: 50%;
   margin-top: 10px;
+  border-radius: 5px;
   border: none;
 `;
 
