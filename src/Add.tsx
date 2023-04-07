@@ -16,6 +16,8 @@ export const Add = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const [sameList, setSameList] = useState<any>([]);
+  const [searchName, setSearchName] = useState<string>("");
+  const [searchName2, setSearchName2] = useState<string>("");
 
   const onSaveHandler = async () => {
     let data = sameList.filter((el: any) => el.name !== "NU");
@@ -70,50 +72,104 @@ export const Add = () => {
         <div>
           현재 리스트 {sameList?.filter((el: any) => el.checked).length}개
         </div>
+        <StyledInput onChange={(e) => setSearchName(e.target.value)} />
         {sameList?.map((el: any) => {
-          if (el.checked)
-            return (
-              <StyledCoinItem
-                onClick={() => {
-                  setSameList((prev: any) => {
-                    return prev.map((item: any) => {
-                      if (el === item) {
-                        return { ...el, checked: false };
-                      } else {
-                        return item;
-                      }
+          if (el.checked) {
+            if (searchName.trim().length !== 0) {
+              if (
+                el.name
+                  .toLocaleLowerCase()
+                  .includes(searchName.toLocaleLowerCase())
+              )
+                return (
+                  <StyledCoinItem
+                    onClick={() => {
+                      setSameList((prev: any) => {
+                        return prev.map((item: any) => {
+                          if (el === item) {
+                            return { ...el, checked: false };
+                          } else {
+                            return item;
+                          }
+                        });
+                      });
+                    }}
+                  >
+                    {el.name}
+                  </StyledCoinItem>
+                );
+            } else {
+              return (
+                <StyledCoinItem
+                  onClick={() => {
+                    setSameList((prev: any) => {
+                      return prev.map((item: any) => {
+                        if (el === item) {
+                          return { ...el, checked: false };
+                        } else {
+                          return item;
+                        }
+                      });
                     });
-                  });
-                }}
-              >
-                {el.name}
-              </StyledCoinItem>
-            );
+                  }}
+                >
+                  {el.name}
+                </StyledCoinItem>
+              );
+            }
+          }
         })}
       </StyledListContainer>
       <StyledListContainer>
         <div>
           제외된 코인 {sameList?.filter((el: any) => !el.checked).length}개
-        </div>
+        </div>{" "}
+        <StyledInput onChange={(e) => setSearchName2(e.target.value)} />
         {sameList?.map((el: any) => {
-          if (!el.checked)
-            return (
-              <StyledCoinItem
-                onClick={() => {
-                  setSameList((prev: any) => {
-                    return prev.map((item: any) => {
-                      if (el === item) {
-                        return { ...el, checked: true };
-                      } else {
-                        return item;
-                      }
+          if (!el.checked) {
+            if (searchName2.trim().length !== 0) {
+              if (
+                el.name
+                  .toLocaleLowerCase()
+                  .includes(searchName2.toLocaleLowerCase())
+              )
+                return (
+                  <StyledCoinItem
+                    onClick={() => {
+                      setSameList((prev: any) => {
+                        return prev.map((item: any) => {
+                          if (el === item) {
+                            return { ...el, checked: false };
+                          } else {
+                            return item;
+                          }
+                        });
+                      });
+                    }}
+                  >
+                    {el.name}
+                  </StyledCoinItem>
+                );
+            } else {
+              return (
+                <StyledCoinItem
+                  onClick={() => {
+                    setSameList((prev: any) => {
+                      return prev.map((item: any) => {
+                        if (el === item) {
+                          return { ...el, checked: false };
+                        } else {
+                          return item;
+                        }
+                      });
                     });
-                  });
-                }}
-              >
-                {el.name}
-              </StyledCoinItem>
-            );
+                  }}
+                >
+                  {el.name}
+                </StyledCoinItem>
+              );
+            }
+          }
         })}
       </StyledListContainer>
     </StyledContainer>
@@ -185,6 +241,12 @@ const StyledListContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const StyledInput = styled.input`
+  width: 50%;
+  margin-top: 10px;
+  border: none;
 `;
 
 const StyledCoinItem = styled.div`
