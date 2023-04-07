@@ -687,12 +687,25 @@ export const Index = () => {
             }
           })
           .map((el: any) => {
-            if (searchName.trim().length !== 0) {
-              if (
-                el.name
-                  .toLocaleLowerCase()
-                  .includes(searchName.toLocaleLowerCase())
-              ) {
+            if (el.per > 0.5 || el.per < -0.5) {
+              if (searchName.trim().length !== 0) {
+                if (
+                  el.name
+                    .toLocaleLowerCase()
+                    .includes(searchName.toLocaleLowerCase())
+                ) {
+                  return (
+                    <Item
+                      mute={mute}
+                      el={el}
+                      per={el.per}
+                      key={el.name}
+                      usdt={usdt}
+                      setFirstRenderList={setFirstRenderList}
+                    />
+                  );
+                }
+              } else {
                 return (
                   <Item
                     mute={mute}
@@ -704,17 +717,6 @@ export const Index = () => {
                   />
                 );
               }
-            } else {
-              return (
-                <Item
-                  mute={mute}
-                  el={el}
-                  per={el.per}
-                  key={el.name}
-                  usdt={usdt}
-                  setFirstRenderList={setFirstRenderList}
-                />
-              );
             }
           })}
       </StyledTempWrap>
