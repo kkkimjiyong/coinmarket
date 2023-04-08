@@ -580,6 +580,9 @@ export const Index = () => {
 
   const [favorite, setFavorite] = useState<boolean>(false);
 
+  //! ===================== 0.5 ~ -0.5프로 사이 제외기능
+  const [more, setMore] = useState<boolean>(false);
+
   return (
     <StyledContainer>
       {" "}
@@ -641,12 +644,20 @@ export const Index = () => {
         </StyledInputBox>
         <StyledFavoriteTxt>
           <div
-            className="text"
+            className="favoritetext"
             onClick={() => {
               setFavorite(!favorite);
             }}
           >
             즐겨찾기 {favorite ? "취소" : "보기"}
+          </div>{" "}
+          <div
+            className="text"
+            onClick={() => {
+              setMore(!more);
+            }}
+          >
+            전체보기 {more && "취소"}
           </div>
         </StyledFavoriteTxt>
         <StyledTitle>
@@ -687,7 +698,37 @@ export const Index = () => {
             }
           })
           .map((el: any) => {
-            if (el.per > 0.5 || el.per < -0.5) {
+            if (more) {
+              if (searchName.trim().length !== 0) {
+                if (
+                  el.name
+                    .toLocaleLowerCase()
+                    .includes(searchName.toLocaleLowerCase())
+                ) {
+                  return (
+                    <Item
+                      mute={mute}
+                      el={el}
+                      per={el.per}
+                      key={el.name}
+                      usdt={usdt}
+                      setFirstRenderList={setFirstRenderList}
+                    />
+                  );
+                }
+              } else {
+                return (
+                  <Item
+                    mute={mute}
+                    el={el}
+                    per={el.per}
+                    key={el.name}
+                    usdt={usdt}
+                    setFirstRenderList={setFirstRenderList}
+                  />
+                );
+              }
+            } else if (el.per > 0.5 || el.per < -0.5) {
               if (searchName.trim().length !== 0) {
                 if (
                   el.name
@@ -879,6 +920,15 @@ const StyledFavoriteTxt = styled.div`
 
   .text {
     color: #a2a7c9;
+    :hover {
+      color: white;
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+  .favoritetext {
+    color: #a2a7c9;
+    margin-right: 20px;
     :hover {
       color: white;
       cursor: pointer;
