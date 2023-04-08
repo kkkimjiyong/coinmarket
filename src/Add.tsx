@@ -139,7 +139,7 @@ export const Add = () => {
                       setSameList((prev: any) => {
                         return prev.map((item: any) => {
                           if (el === item) {
-                            return { ...el, checked: false };
+                            return { ...el, checked: true };
                           } else {
                             return item;
                           }
@@ -157,7 +157,7 @@ export const Add = () => {
                     setSameList((prev: any) => {
                       return prev.map((item: any) => {
                         if (el === item) {
-                          return { ...el, checked: false };
+                          return { ...el, checked: true };
                         } else {
                           return item;
                         }
