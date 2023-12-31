@@ -131,7 +131,7 @@ export const Item = ({
           .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </StyledItemBox>
       <StyledPerBox className="per" larger={larger} color={color}>
-        {el.per?.toFixed(2)}%
+        {per?.toFixed(2)}%
       </StyledPerBox>
       <StyledStarBox>
         {JSON.parse(localStorage.getItem("favorites") || "[]").includes(

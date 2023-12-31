@@ -11,6 +11,8 @@ import { ImVolumeMute } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import { useInterval } from "./custom/useInterval";
 import { supabase } from "./lib/supabase";
+import { ListContainer_reverse } from "./components/ListContainer_reverse";
+import { ListContainer } from "./components/ListContainer";
 
 export const Index = () => {
   const navigate = useNavigate();
@@ -425,9 +427,6 @@ export const Index = () => {
   }, [userDone]);
 
   useEffect(() => {
-    console.log(isLoading);
-    console.log(isLoading1);
-    console.log(firstBinance);
     if (!isLoading && !isLoading1 && userDone) {
       setFirstRenderList(() => {
         let newData = [];
@@ -545,6 +544,7 @@ export const Index = () => {
           }
         }
         el.per = (el.upbit / (el.binance * usdt) - 1) * 100;
+        el.rPer = (el.binance / (el.upbit / usdt) - 1) * 100;
       });
 
       setFirstRenderList(firstRender); //비트코인 및 usdt환율 업데이트 따로
@@ -587,6 +587,7 @@ export const Index = () => {
     <StyledContainer>
       {" "}
       {isLoading && isLoading1 && <Loading />}
+      <FlexBox></FlexBox>
       <StyledTempWrap>
         <StyledOptionBox>
           <div
@@ -633,14 +634,6 @@ export const Index = () => {
             onChange={(e) => setSearchName(e.target.value)}
             placeholder="코인이름을 입력하세요"
           />{" "}
-          {/* <div
-            onClick={() => {
-              setSubmit(true);
-            }}
-            className="btn"
-          >
-            검색
-          </div> */}
         </StyledInputBox>
         <StyledFavoriteTxt>
           <div
@@ -659,107 +652,27 @@ export const Index = () => {
           >
             전체보기 {more && "취소"}
           </div>
-        </StyledFavoriteTxt>
-        <StyledTitle>
-          <StyledTitleItem>코인이름</StyledTitleItem>
-          <StyledMediaFlex>
-            <StyledTitleItem>
-              <img className="binance" src={binance} alt="바이낸스" />
-              <span>바이낸스</span>
-            </StyledTitleItem>
-            <StyledTitleItem>
-              <img className="upbit" src={upbit} alt="바이낸스" />
-              <span>업비트</span>
-            </StyledTitleItem>
-          </StyledMediaFlex>
-
-          <StyledTitleItem>매수가총액</StyledTitleItem>
-          <StyledTitleItem>보따리각</StyledTitleItem>
-        </StyledTitle>
-        {firstRenderList
-          .sort((a: any, b: any) => {
-            if (a.per > b.per) return -1;
-            if (a.per === b.per) return 0;
-            if (a.per < b.per) return 1;
-          })
-          .filter((el: any) => el.per < -1.5)
-          .concat(firstRenderList.filter((el: any) => el.per > -1.5))
-          .filter((el: any) => {
-            if (favorite) {
-              if (
-                JSON.parse(localStorage.getItem("favorites") || "[]").includes(
-                  el.name
-                )
-              ) {
-                return el;
-              }
-            } else {
-              return el;
-            }
-          })
-          .map((el: any) => {
-            if (more) {
-              if (searchName.trim().length !== 0) {
-                if (
-                  el.name
-                    .toLocaleLowerCase()
-                    .includes(searchName.toLocaleLowerCase())
-                ) {
-                  return (
-                    <Item
-                      mute={mute}
-                      el={el}
-                      per={el.per}
-                      key={el.name}
-                      usdt={usdt}
-                      setFirstRenderList={setFirstRenderList}
-                    />
-                  );
-                }
-              } else {
-                return (
-                  <Item
-                    mute={mute}
-                    el={el}
-                    per={el.per}
-                    key={el.name}
-                    usdt={usdt}
-                    setFirstRenderList={setFirstRenderList}
-                  />
-                );
-              }
-            } else if (el.per > 0.5 || el.per < -0.5) {
-              if (searchName.trim().length !== 0) {
-                if (
-                  el.name
-                    .toLocaleLowerCase()
-                    .includes(searchName.toLocaleLowerCase())
-                ) {
-                  return (
-                    <Item
-                      mute={mute}
-                      el={el}
-                      per={el.per}
-                      key={el.name}
-                      usdt={usdt}
-                      setFirstRenderList={setFirstRenderList}
-                    />
-                  );
-                }
-              } else {
-                return (
-                  <Item
-                    mute={mute}
-                    el={el}
-                    per={el.per}
-                    key={el.name}
-                    usdt={usdt}
-                    setFirstRenderList={setFirstRenderList}
-                  />
-                );
-              }
-            }
-          })}
+        </StyledFavoriteTxt>{" "}
+        <FlexBox>
+          <ListContainer
+            firstRenderList={firstRenderList}
+            setFirstRenderList={setFirstRenderList}
+            mute={mute}
+            more={more}
+            searchName={searchName}
+            usdt={usdt}
+            favorite={favorite}
+          />
+          <ListContainer_reverse
+            firstRenderList={firstRenderList}
+            setFirstRenderList={setFirstRenderList}
+            mute={mute}
+            more={more}
+            searchName={searchName}
+            usdt={usdt}
+            favorite={favorite}
+          />
+        </FlexBox>
       </StyledTempWrap>
     </StyledContainer>
   );
@@ -778,9 +691,15 @@ const StyledContainer = styled.div`
   align-items: center;
 `;
 
+const FlexBox = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const StyledTempWrap = styled.div`
   width: 100%;
-  max-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -909,14 +828,14 @@ const StyledExchaneBox = styled.div`
 `;
 
 const StyledFavoriteTxt = styled.div`
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 70;
   color: #a2a7c9;
   width: 90%;
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
-  margin-bottom: -40px;
+  margin-bottom: 10px;
 
   .text {
     color: #a2a7c9;
