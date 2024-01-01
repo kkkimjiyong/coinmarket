@@ -17,7 +17,7 @@ export const Item = ({
   setFirstRenderList: React.Dispatch<React.SetStateAction<any>>;
   el: any;
   usdt: any;
-  type: string;
+  type?: string;
 }) => {
   const [larger, setLarger] = useState<string>("");
   const [color, setColor] = useState<string>("");
