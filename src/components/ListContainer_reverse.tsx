@@ -10,16 +10,16 @@ export const ListContainer_reverse = ({
   favorite,
   more,
   searchName,
-  mute,
   usdt,
+  mute,
 }: {
   firstRenderList: any;
   setFirstRenderList: any;
   favorite: boolean;
   more: boolean;
   searchName: string;
-  mute: boolean;
   usdt: string;
+  mute: boolean;
 }) => {
   console.log("[ reverse firstRenderList  ] :::", firstRenderList);
   return (
@@ -71,6 +71,7 @@ export const ListContainer_reverse = ({
               ) {
                 return (
                   <Item
+                    type="rPer"
                     mute={mute}
                     el={el}
                     per={el.rPer}
@@ -83,6 +84,7 @@ export const ListContainer_reverse = ({
             } else {
               return (
                 <Item
+                  type="rPer"
                   mute={mute}
                   el={el}
                   per={el.rPer}
@@ -101,6 +103,7 @@ export const ListContainer_reverse = ({
               ) {
                 return (
                   <Item
+                    type="rPer"
                     mute={mute}
                     el={el}
                     per={el.rPer}
@@ -113,6 +116,7 @@ export const ListContainer_reverse = ({
             } else {
               return (
                 <Item
+                  type="rPer"
                   mute={mute}
                   el={el}
                   per={el.rPer}

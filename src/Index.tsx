@@ -654,16 +654,16 @@ export const Index = () => {
           </div>
         </StyledFavoriteTxt>{" "}
         <FlexBox>
-          <ListContainer
+          <ListContainer_reverse
             firstRenderList={firstRenderList}
             setFirstRenderList={setFirstRenderList}
-            mute={mute}
+            mute={true}
             more={more}
             searchName={searchName}
             usdt={usdt}
             favorite={favorite}
-          />
-          <ListContainer_reverse
+          />{" "}
+          <ListContainer
             firstRenderList={firstRenderList}
             setFirstRenderList={setFirstRenderList}
             mute={mute}

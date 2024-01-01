@@ -10,35 +10,43 @@ export const Item = ({
   per,
   mute,
   setFirstRenderList,
+  type,
 }: {
   per: any;
   mute: boolean;
   setFirstRenderList: React.Dispatch<React.SetStateAction<any>>;
   el: any;
   usdt: any;
+  type: string;
 }) => {
   const [larger, setLarger] = useState<string>("");
   const [color, setColor] = useState<string>("");
   const [play] = useSound(alarm);
   useEffect(() => {
-    if (el.upbit > el.binance * usdt) {
-      setLarger("upbit");
-      if (el.per > 2) {
-        setColor(" #d95561");
-        if (!mute) {
-          play();
-        }
-        return;
-      } else if (el.per > 1.5) {
-        setColor(" #e19c3a");
-        return;
-      } else {
-        setColor("#6dc888");
-      }
-    } else if (el.upbit < el.binance * usdt) {
-      setLarger("binance");
-      if (el.per < -1.5) {
+    if (type === "rPer") {
+      if (el.rPer < -1.5) {
         setColor("#4d83ff");
+      }
+    } else {
+      if (el.upbit > el.binance * usdt) {
+        setLarger("upbit");
+        if (el.per > 2) {
+          setColor(" #d95561");
+          if (!mute) {
+            play();
+          }
+          return;
+        } else if (el.per > 1.5) {
+          setColor(" #e19c3a");
+          return;
+        } else {
+          setColor("#6dc888");
+        }
+      } else if (el.upbit < el.binance * usdt) {
+        setLarger("binance");
+        if (el.per < -1.5) {
+          setColor("#4d83ff");
+        }
       }
     }
   }, [per, mute]);
