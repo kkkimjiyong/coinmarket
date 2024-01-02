@@ -46,8 +46,8 @@ export const ListContainer_reverse = ({
           if (a.rPer === b.rPer) return 0;
           if (a.rPer < b.rPer) return -1;
         })
-        .filter((el: any) => el.rPer < -1.5)
-        .concat(firstRenderList.filter((el: any) => el.rPer > -1.5))
+        .filter((el: any) => el.rPer > 0)
+        .concat(firstRenderList.filter((el: any) => el.rPer > 0))
         .filter((el: any) => {
           if (favorite) {
             if (
@@ -132,9 +132,10 @@ export const ListContainer_reverse = ({
   );
 };
 const Wrapper = styled.div`
+  height: 100%;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
 `;
 const StyledMediaFlex = styled.div`
